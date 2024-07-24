@@ -1,0 +1,337 @@
+.navbar-nav li{
+    cursor: pointer;
+}
+.modal a{
+    cursor: pointer;
+}
+.alert-warning{
+    color: red;
+}
+
+@-webkit-keyframes fadeInRight {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+.fadeInRight {
+    -webkit-animation-name: fadeInRight;
+    animation-name: fadeInRight;
+}
+
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+.table .alert-danger {
+    color: #a94442 !important;
+    background-color: #f2dede !important;
+    border-color: #ebccd1 !important;
+}
+
+.alert {
+    padding: 10px 15px;
+    font-size: 14px;
+}
+
+.alert:not(.float-alert) span[data-notify="icon"] {
+    float: left;
+    font-size: 18px;
+    margin-top: 0;
+}
+
+.float-alert.alert span[data-notify="icon"] {
+    font-size: 20px;
+    display: block;
+    left: 13px;
+    position: absolute;
+    top: 50%;
+    margin-top: -11px;
+}
+
+.alert.float-alert .alert-title {
+    margin-left: 30px;
+    font-weight: 500;
+}
+
+body.rtl .alert.float-alert .alert-title {
+    float: left;
+}
+
+.alert:not(.float-alert) .alert-title {
+    margin-left: 10px;
+}
+
+.alert.float-alert button.close {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -13px;
+    z-index: 1033;
+    background-color: #FFFFFF;
+    display: block;
+    border-radius: 50%;
+    opacity: .4;
+    line-height: 11px;
+    width: 25px;
+    height: 25px;
+    outline: 0 !important;
+    text-align: center;
+    padding: 3px;
+    font-weight: 400;
+}
+
+.alert.float-alert button.close:hover {
+    opacity: .55;
+}
+
+.alert.float-alert .close~span {
+    display: block;
+    max-width: 89%;
+}
+
+.alert.alert-dismissible button.close {
+    right: -2px;
+}
+
+.announcement .alert-dismissible .close {
+    top: -4px;
+}
+
+.account-siderbar{
+    border: 1px solid #dedede;
+    min-height: 500px;
+}
+.account-siderbar li{
+    margin: 20px;
+}
+.account-siderbar li i{
+    font-size: 15px;
+}
+.account-siderbar li.active a{
+    color: #d87206;
+}
+.account-panel{
+    border: 1px solid #dedede;
+    min-height: 500px;
+    padding: 20px;
+}
+.title{
+
+}
+.inline-input-wrap{
+
+}
+.step-item-wrap{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    margin: 0px auto;
+    width: 100%;
+    margin-top: 20px;
+}
+.step-item{
+    width: 100%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-flow: column;
+    grid-gap: 10px;
+}
+.step-number{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+.step-number-content{
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e5e5e5;
+    font-size: 20px;
+    color: #7e7e7e;
+    z-index: 2;
+}
+.step-number-line{
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: calc(50% - 2px);
+    height: 4px;
+    background-color: #e5e5e5;
+    z-index: -1;
+}
+.step-number-line-first{
+    left: 50%;
+}
+.step-number-line-last{
+    right: 50%;
+}
+.step-number-desc{
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+}
+.step-active-item {
+    cursor: pointer;
+}
+
+.step-active-item .step-number-content{
+    background-color: #03c96d;
+    color: white;
+}
+.step-active-item .step-number-line{
+    background-color: #06e17c;
+}
+.require-error{
+    border-color: red;
+}
+.total-error-wrap{
+    border-radius: 5px;
+    border: 1px solid #f18f8f;
+    padding: 10px;
+    background-color: #f9f5f5;
+    color: #aa0000;
+}
+
+.step-current-item .step-number-content{
+    background-color: #e15706;
+    color: white;
+}
+.step-current-item .step-number-line{
+    background-color: #e15706;
+}
+@media(max-width: 500px){
+    .step-number-content{
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    .step-number-desc{
+        font-size: 10px;
+    }
+}
+.setp-stage-title-wrap{
+    display: grid;
+    grid-template-columns: auto 100px;
+    width: 100%;
+    border-top: 1px solid #f3f2f2;
+    border-bottom: 1px solid #f3f2f2;
+    padding: 15px 10px;
+    font-size: 20px;
+}
+.setp-stage-title{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: #047398;
+}
+
+.setp-stage{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.step-box{
+    width: 100%;
+    margin-top: 20px;
+    border: 1px solid #008045;
+    border-radius: 5px;
+    overflow: hidden;
+    display: none;
+}
+.step-box-title{
+    background-color: #008045;
+    color: white;
+    padding: 15px;
+    font-size: 18px;
+}
+.step-box-content{
+    padding: 20px;
+    background-color: #f5fdf9;
+}
+.step-box-sub-title{
+    font-size: 16px;
+    color: #a8a8a8;
+    margin-top: 10px;
+}
+.step-input-wrap{
+    margin-top: 10px;
+}
+.step-input-wrap label{
+    font-weight: normal;
+}
+.step-radio-wrap{
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    grid-gap: 10px;
+}
+.step-radio-wrap label{
+    font-weight: normal;
+    margin: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    grid-gap: 10px;
+}
+.step-radio-wrap input[type="checkbox"]{
+    margin: 0px;
+    width: 16px;
+    height: 16px;
+}
+
+.step-radio-wrap input[type="radio"]{
+    margin: 0px;
+    width: 16px;
+    height: 16px;
+}
+.step-btn-wrap{
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 5px 0px;
+}
+.step-btn-content{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-top: 1px solid #f3f2f2;
+    border-bottom: 1px solid #f3f2f2;
+    padding: 15px 0px;
+}
+.step-btn{
+    width: 120px;
+    background-color: #008045;
+    height: 40px;
+    text-transform: uppercase;
+}
