@@ -111,7 +111,7 @@
             <div class="profile clearfix">
               <div class="profile_pic" style="margin-top: 20px; width:45%;">
                 <?php  
-                    $user = $this->common_model->readData("user",array("id"=>$this->session->userdata('admin_id')));
+                    $user = $this->common_model->readData("user",array("id"=>session()->get('admin_id')));
                 ?>
                 <img style="height: 70px;" src='<?php echo base_url("/assets/client_assets/images/logo.png");?>' alt="..." class="profile_img">
               </div>

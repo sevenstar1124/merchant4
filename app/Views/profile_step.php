@@ -42,33 +42,33 @@
     <body>
 
 <?php
-    $member_data = get_row("member_data",array("member_id"=>$this->session->userdata("member_id")));
-    if($this->session->userdata("warning")!=""){
+    $member_data = get_row("member_data",array("member_id"=>session()->get("member_id")));
+    if(session()->get("warning")!=""){
 ?>
     <div id="alert_error_wrap" class="float-alert animated fadeInRight col-xs-11 col-sm-4 alert alert-danger" style="z-index: 10000; float: right; margin-top: 10px;">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
-        <span class="fa fa-bell-o" data-notify="icon"></span><span class="alert-title"><?php echo $this->session->userdata("warning"); ?></span>
+        <span class="fa fa-bell-o" data-notify="icon"></span><span class="alert-title"><?php echo session()->get("warning"); ?></span>
     </div>
 
 <?php     
-    $this->session->unset_userdata("warning");
+    session()->remove("warning");
     }
 ?>
 
 <?php
-    if($this->session->userdata("success")!=""){
+    if(session()->get("success")!=""){
 ?>
     <div id="alert_error_wrap" class="float-alert animated fadeInRight col-xs-11 col-sm-4 alert alert-success" style="z-index: 10000; float: right; margin-top: 10px;">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
-        <span class="fa fa-bell-o" data-notify="icon"></span><span class="alert-title"><?php echo $this->session->userdata("success"); ?></span>
+        <span class="fa fa-bell-o" data-notify="icon"></span><span class="alert-title"><?php echo session()->get("success"); ?></span>
     </div>
 
 <?php     
-    $this->session->unset_userdata("success");
+    session()->remove("success");
     }
 ?>
 <style type="text/css">

@@ -27,9 +27,9 @@
                 </ul>
             </div>
             <div class="col-md-9" style="padding: 0px 0px 0px 10px;">
-                <div class="account-panel <?php if($this->session->userdata("active_status") == "Inactive") echo "inactive-panel"; ?>">
+                <div class="account-panel <?php if(session()->get("active_status") == "Inactive") echo "inactive-panel"; ?>">
                     <?php 
-                        $member = get_row("member",array("id"=>$this->session->userdata("member_id")));
+                        $member = get_row("member",array("id"=>session()->get("member_id")));
                     ?>
                     <div class="title">
                         Products
@@ -53,7 +53,7 @@
                                 </thead>
                                 <tbody>
                              <?php
-                                $products = get_rows("product",array("user_id"=>$this->session->userdata("member_id")));
+                                $products = get_rows("product",array("user_id"=>session()->get("member_id")));
                                 foreach ($products as $key => $product) {
                                     echo "<tr data-id='".$product['id']."'>";
                                     echo '<td>'.$product['id'].'</td>';

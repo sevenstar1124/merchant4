@@ -77,7 +77,7 @@
                     </thead>
                     <tbody>
                     <?php
-                        $questions = get_rows("questions",array("status"=>1,"user_id"=>$this->session->userdata("member_id")),"date DESC");
+                        $questions = get_rows("questions",array("status"=>1,"user_id"=>session()->get("member_id")),"date DESC");
                         foreach ($questions as $key => $question) {
                             $tag = get_row("help_tag",array("id"=>$question['tag_id']));
                             echo '<tr data-id="'.$question['id'].'">';
@@ -87,7 +87,7 @@
                             $answer_count = get_rows_count("answers",array("question_id"=>$question['id']));
                             echo '<td>'.$answer_count.'</td>';
                             echo '<td>'.$question['date'].'</td>';
-                            if($question['user_id'] == $this->session->userdata("member_id"))
+                            if($question['user_id'] == session()->get("member_id"))
                                 echo '<td class="action_td"><a class="edit_question" title="edit"><i class="fa fa-edit"></i></a> | <a class="remove_question" title="remove"><i class="fa fa-trash"></i></a></td>';
                             else 
                                 echo '<td class="action_td"></td>';

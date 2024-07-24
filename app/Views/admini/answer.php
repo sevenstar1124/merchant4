@@ -60,7 +60,7 @@
                         $date = strtotime($question['date']);
                         $date1 = date("F d, Y",$date)." at ". date("H:i",$date);
 
-                        // if($question['user_id'] == $this->session->userdata("member_id")) echo "I";
+                        // if($question['user_id'] == session()->get("member_id")) echo "I";
                         // else {
                             $user = get_row("member",array("id"=>$question['user_id']));
                             echo "  ".$user['first_name'].' '.$user['last_name'];

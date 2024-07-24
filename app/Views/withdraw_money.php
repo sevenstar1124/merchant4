@@ -19,9 +19,9 @@
                 </ul>
             </div>
             <div class="col-md-9" style="padding: 0px 0px 0px 10px;">
-                <div class="account-panel <?php if($this->session->userdata("active_status") == "Inactive") echo "inactive-panel"; ?>">
+                <div class="account-panel <?php if(session()->get("active_status") == "Inactive") echo "inactive-panel"; ?>">
                     <?php 
-                        $member = get_row("member",array("id"=>$this->session->userdata("member_id")));
+                        $member = get_row("member",array("id"=>session()->get("member_id")));
                     ?>
                     <div class="title" style="margin-bottom: 0px;">
                         Withdraw Money
@@ -43,7 +43,7 @@
                                 My Bank Account
                             </div>
                             <?php
-                                $bank = get_row("bank",array("user_id"=>$this->session->userdata("member_id")));
+                                $bank = get_row("bank",array("user_id"=>session()->get("member_id")));
                             ?>
                             <div class="col-md-12">
                                 <div class="form-group" style="margin-top: 0px;">
@@ -144,7 +144,7 @@
                                 </thead>
                                 <tbody>
                              <?php
-                                $withdraws = get_rows("withdraw",array("user_id"=>$this->session->userdata("member_id")),"request_date DESC");
+                                $withdraws = get_rows("withdraw",array("user_id"=>session()->get("member_id")),"request_date DESC");
                                 foreach ($withdraws as $key => $withdraw) {
                                     $fee =floor($withdraw['fee']*100)/100;
                                     $complete_date = $withdraw['complete_date'];

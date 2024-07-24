@@ -37,11 +37,11 @@
                 </ul>
             </div>
             <div class="col-md-9" style="padding: 0px 0px 0px 10px;">
-                <div class="account-panel <?php if($this->session->userdata("active_status") == "Inactive") echo "inactive-panel"; ?>">
+                <div class="account-panel <?php if(session()->get("active_status") == "Inactive") echo "inactive-panel"; ?>">
                     <div class="row">
                          <div class="col-md-12">
                             <?php 
-                                $messages = get_rows("message",array("receiver"=>$this->session->userdata("member_id")));
+                                $messages = get_rows("message",array("receiver"=>session()->get("member_id")));
                             ?>
                             <p style="font-weight: 500;">
                                 Message Inbox <span style="color: white;background: green;display: inline-block;border-radius: 50%;width: 30px;text-align: center;height: 30px;padding-top: 5px;"><?php echo count($messages); ?></span>

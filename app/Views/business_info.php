@@ -1,6 +1,6 @@
 <?php 
     $this->load->view("header");
-    $member_data = get_row("member_data",array("member_id"=>$this->session->userdata("member_id")));
+    $member_data = get_row("member_data",array("member_id"=>session()->get("member_id")));
 ?>   
 
 <link rel="stylesheet" href="<?php echo base_url('assets/client_assets/css/step.css'); ?>">
@@ -28,9 +28,9 @@
                 </ul>
             </div>
             <div class="col-md-9" style="padding: 0px 0px 0px 10px;">
-                <div class="account-panel <?php if($this->session->userdata("active_status") == "Inactive") echo "inactive-panel"; ?>">
+                <div class="account-panel <?php if(session()->get("active_status") == "Inactive") echo "inactive-panel"; ?>">
                     <?php 
-                        $member = get_row("member",array("id"=>$this->session->userdata("member_id")));
+                        $member = get_row("member",array("id"=>session()->get("member_id")));
                     ?>
 
                         <form action="<?php echo site_url("account/saveStep"); ?>" method="post" name="step_form" id="step_form">   

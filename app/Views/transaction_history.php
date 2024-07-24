@@ -30,9 +30,9 @@
                 </ul>
             </div>
             <div class="col-md-9" style="padding: 0px 0px 0px 10px;">
-                <div class="account-panel <?php if($this->session->userdata("active_status") == "Inactive") echo "inactive-panel"; ?>">
+                <div class="account-panel <?php if(session()->get("active_status") == "Inactive") echo "inactive-panel"; ?>">
                     <?php 
-                        $member = get_row("member",array("id"=>$this->session->userdata("member_id")));
+                        $member = get_row("member",array("id"=>session()->get("member_id")));
                     ?>
                     <div class="title">
                         Transaction History
@@ -57,7 +57,7 @@
                                 </thead>
                                 <tbody>
                              <?php
-                                $transactions = get_rows("transaction",array("user_id"=>$this->session->userdata("member_id")),"date DESC");
+                                $transactions = get_rows("transaction",array("user_id"=>session()->get("member_id")),"date DESC");
                                 foreach ($transactions as $key => $transaction) {
                                     $user = get_row('member', array('id' => $transaction['user_id']));
                                     if(($user['status'] == 0 || $user['approve_status'] != 2) && $transaction['payment_type'] == "service_fee") continue;

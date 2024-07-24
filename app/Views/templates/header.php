@@ -230,34 +230,34 @@
     <body>
 
 <?php
-
-    if($this->session->userdata("warning")!=""){
+    if (session()->get('warning') !== "") {
+    // if(session()->get("warning")!=""){
 ?>
     <div id="alert_error_wrap" class="float-alert animated fadeInRight col-xs-11 col-sm-4 alert alert-danger" style="z-index: 10000; float: right; margin-top: 10px;">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
-        <span class="fa fa-bell-o" data-notify="icon"></span><span class="alert-title"><?php echo $this->session->userdata("warning"); ?></span>
+        <span class="fa fa-bell-o" data-notify="icon"></span><span class="alert-title"><?php echo session()->get('warning'); ?></span>
     </div>
 
 <?php     
-    $this->session->unset_userdata("warning");
+    session()->remove('warning');
     }
 ?>
 
 <?php
 
-    if($this->session->userdata("success")!=""){
+    if(session()->get("success")!=""){
 ?>
     <div id="alert_error_wrap" class="float-alert animated fadeInRight col-xs-11 col-sm-4 alert alert-success" style="z-index: 10000; float: right; margin-top: 10px;">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
-        <span class="fa fa-bell-o" data-notify="icon"></span><span class="alert-title"><?php echo $this->session->userdata("success"); ?></span>
+        <span class="fa fa-bell-o" data-notify="icon"></span><span class="alert-title"><?php echo session()->get("success"); ?></span>
     </div>
 
 <?php     
-    $this->session->unset_userdata("success");
+    session()->remove("success");
     }
 ?>
 
@@ -330,7 +330,7 @@ Header Section Start
                         </div>
                     </li>
                     <li><a href="<?php echo site_url("/login/logout"); ?>">Log Out</a></li>
-                    <li><a style="color: <?php if($this->session->userdata("active_status") == "Pending") echo "red"; else if($this->session->userdata("active_status") == "Under Review") echo "green"; else echo "blue"; ?>">Live mode : <?php echo $this->session->userdata("active_status"); ?></a></li>
+                    <li><a style="color: <?php if(session()->get("active_status") == "Pending") echo "red"; else if(session()->get("active_status") == "Under Review") echo "green"; else echo "blue"; ?>">Live mode : <?php echo session()->get("active_status"); ?></a></li>
                     
                 </ul>
             </div>
@@ -365,11 +365,11 @@ Header Section Start
 </style>
 <?php 
 
-    if($this->session->userdata("show_box") == "yes"){ 
+    if(session()->get("show_box") == "yes"){ 
 ?>
 <div class="notification_wrap">
     <?php
-        if($this->session->userdata("approve_status") != 2){
+        if(session()->get("approve_status") != 2){
     ?>
     <p class="error-title">Your account is pending to live mode.</p>
     <p class="error-note">You can't do anything on this portal before accept it. Please Accept Merchant Processing Terms To Continue.</p>
