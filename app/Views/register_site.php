@@ -1,5 +1,5 @@
 <?php 
-    $this->load->view("header");
+    echo view('templates/header');;
 ?>        
 <style type="text/css">
     .site-panel{
@@ -126,7 +126,7 @@ Call To Action Section Start
 
 
 <?php 
-    $this->load->view("footer");
+    echo view('templates/footer');;
 ?> 
 <script type="text/javascript">
     $(function(){

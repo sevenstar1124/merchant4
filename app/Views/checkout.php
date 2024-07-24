@@ -394,7 +394,7 @@ Header Section Start
 </div> 
 
 <?php 
-    $this->load->view("footer");
+    echo view('templates/footer');;
 ?> 
 <script type="text/javascript">
     $(function(){

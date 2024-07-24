@@ -11,13 +11,13 @@ class User extends MY_Admin_Controller {
 
 	public function index()
 	{
-		$users = $this->common_model->readDatas("user");
-		$this->load->view('admini/user_list.php', array("users"=>$users));
+		$users = $this->commonModel->readDatas("user");
+		return view('admini/user_list.php', array("users"=>$users));
 	}
 
 	public function Add()
 	{
-		$this->load->view('admini/user_create.php');
+		return view('admini/user_create.php');
 	}
 
 	public function createuser(){
@@ -41,7 +41,7 @@ class User extends MY_Admin_Controller {
             //upload file to server
             if(move_uploaded_file($_FILES["photo"]["tmp_name"], $targetFilePath)){
                 $insertData['photo'] = $fileName;
-                $this->common_model->createData("user",$insertData);
+                $this->commonModel->createData("user",$insertData);
                 redirect(site_url()."admini/user");
             }else{
                 $error = 'err';
@@ -56,7 +56,7 @@ class User extends MY_Admin_Controller {
  	
  	public function deleteuser(){
  		$id = $this->input->post("user_id");
- 		$this->common_model->deleteData("user",array("id"=>$id));
+ 		$this->commonModel->deleteData("user",array("id"=>$id));
  		redirect(site_url()."admini/user");
  	}
 
@@ -67,7 +67,7 @@ class User extends MY_Admin_Controller {
  		// exit;
 		$updateData = $this->input->post();
 
-		$user_data = $this->common_model->readData("user",array("id"=>$updateData['id']));
+		$user_data = $this->commonModel->readData("user",array("id"=>$updateData['id']));
 		 
 
 		$id = $updateData['id'];
@@ -87,7 +87,7 @@ class User extends MY_Admin_Controller {
 	            //upload file to server
 	            if(move_uploaded_file($_FILES["photo"]["tmp_name"], $targetFilePath)){
 	                $updateData['photo'] = $fileName;
-	                $this->common_model->updateData("user",$updateData,array("id"=>$id));
+	                $this->commonModel->updateData("user",$updateData,array("id"=>$id));
 	                redirect(site_url()."admini/user");
 	            }else{
 	                $error = 'err';
@@ -100,7 +100,7 @@ class User extends MY_Admin_Controller {
 	    } else {
 			// $updateData['imagename'] = $updateData['imagenamesave'];
 
-	        $this->common_model->updateData("user",$updateData,array("id"=>$id));
+	        $this->commonModel->updateData("user",$updateData,array("id"=>$id));
             redirect(site_url()."admini/user");
 	    }
 
@@ -110,19 +110,19 @@ class User extends MY_Admin_Controller {
 
 	public function getuserData(){
 		$id = $this->input->post("id");
-		$row = $this->common_model->readData("user",array("id"=>$id));
+		$row = $this->commonModel->readData("user",array("id"=>$id));
 		echo json_encode(array("data"=>$row));
 	}
 
 	public function deleteuserData(){
 		$id = $this->input->post("id");
-		$this->common_model->deleteData("user",array("id"=>$id));
+		$this->commonModel->deleteData("user",array("id"=>$id));
 		echo json_encode(array("data"=>"OK"));
 	}
 
 	public function profile(){
-		$user = $this->common_model->readData("user",array("id"=>$this->session->userdata("admin_id")));
-		$this->load->view("admini/profile",array("user"=>$user,"error"=>""));
+		$user = $this->commonModel->readData("user",array("id"=>$this->session->get("admin_id")));
+		return view("admini/profile",array("user"=>$user,"error"=>""));
 	}
 
 	public function updateProfile(){
@@ -130,7 +130,7 @@ class User extends MY_Admin_Controller {
  		// exit;
 		$updateData = $this->input->post();
 
-		$user_data = $this->common_model->readData("user",array("id"=>$updateData['id']));
+		$user_data = $this->commonModel->readData("user",array("id"=>$updateData['id']));
 		 
 
 		$id = $updateData['id'];
@@ -150,7 +150,7 @@ class User extends MY_Admin_Controller {
 	            //upload file to server
 	            if(move_uploaded_file($_FILES["photo"]["tmp_name"], $targetFilePath)){
 	                $updateData['photo'] = $fileName;
-	                $this->common_model->updateData("user",$updateData,array("id"=>$id));
+	                $this->commonModel->updateData("user",$updateData,array("id"=>$id));
 	                redirect(site_url()."admini/user/profile");
 	            }else{
 	                $error = 'err';
@@ -163,7 +163,7 @@ class User extends MY_Admin_Controller {
 	    } else {
 			// $updateData['imagename'] = $updateData['imagenamesave'];
 
-	        $this->common_model->updateData("user",$updateData,array("id"=>$id));
+	        $this->commonModel->updateData("user",$updateData,array("id"=>$id));
             redirect(site_url()."admini/user/profile");
 	    }
 
@@ -172,15 +172,15 @@ class User extends MY_Admin_Controller {
 	}
 
 	public function updateAccount(){
-		$data = $this->input->post();
-		$user_data = $this->common_model->readData("user",array("id"=>$this->session->userdata("admin_id")));
+		$data = $this->request->getPost();
+		$user_data = $this->commonModel->readData("user",array("id"=>$this->session->get("admin_id")));
 		$err = "";
 		if($user_data['password']!=md5($data['old_password'])) $err = "Old Password is not correct!";
 		if($data['new_password']!=$data['con_password']) $err = "No mached new password!";
 		if($err!=""){
-			$this->common_model->updateData("user",array("password"=>md5($data['new_password'])),array("id"=>$this->session->userdata("admin_id")));
+			$this->commonModel->updateData("user",array("password"=>md5($data['new_password'])),array("id"=>$this->session->get("admin_id")));
 		}
-		$this->load->view("admini/profile",array("user"=>$user_data,"error"=>$err));
+		return view("admini/profile",array("user"=>$user_data,"error"=>$err));
 
 	}
 

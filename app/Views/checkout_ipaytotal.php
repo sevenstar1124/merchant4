@@ -465,7 +465,7 @@ Header Section Start
 
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>    
 <?php 
-    $this->load->view("footer");
+    echo view('templates/footer');;
 ?> 
 <script type="text/javascript">
     var stripe_publish_key = "<?php echo $stripe_publish_key; ?>";

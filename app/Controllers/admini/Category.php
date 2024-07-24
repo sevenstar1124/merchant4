@@ -11,31 +11,31 @@ class Category extends MY_Admin_Controller {
 
 	public function index()
 	{
-		$categories = $this->common_model->readDatas("category");
-		$this->load->view('admini/category_list.php', array("categories"=>$categories));
+		$categories = $this->commonModel->readDatas("category");
+		return view('admini/category_list.php', array("categories"=>$categories));
 	}
 	public function Add()
 	{
-		$this->load->view('admini/category_create.php');
+		return view('admini/category_create.php');
 	}
 
 	public function createcategory(){
 		$insertData = array();
 		$insertData = $this->input->post();
 		if($this->input->post("status")=="on") $insertData['status'] = 1; else $insertData['status'] = 0;
-		$this->common_model->createData("category",$insertData);
+		$this->commonModel->createData("category",$insertData);
  		redirect(site_url()."admini/category");
 	}
  	
  	public function deleteCategory(){
  		$id = $this->input->post("id");
- 		$this->common_model->deleteData("category",array("id"=>$id));
+ 		$this->commonModel->deleteData("category",array("id"=>$id));
 		echo json_encode(array("data"=>"OK"));
  	}
 
  	public function getCategoryData(){
  		$id = $this->input->post("id");
- 		$data = $this->common_model->readData("category",array("id"=>$id));
+ 		$data = $this->commonModel->readData("category",array("id"=>$id));
  		echo json_encode(array("data"=>$data,"result"=>"ok"));
  	}
 
@@ -43,7 +43,7 @@ class Category extends MY_Admin_Controller {
  		$id = $this->input->post("id");
  		$updateData = $this->input->post();
  		if($this->input->post("status")=="on")$updateData['status'] = 1; else $updateData['status'] = 0;
- 		$this->common_model->updateData("category",$updateData,array('id'=>$id));
+ 		$this->commonModel->updateData("category",$updateData,array('id'=>$id));
  		redirect(site_url()."admini/category");
  	}
 

@@ -42,7 +42,7 @@
     <body>
 
 <?php
-    $member_data = get_row("member_data",array("member_id"=>session()->get("member_id")));
+    $member_data = get_row('member',array("member_id"=>session()->get("member_id")));
     if(session()->get("warning")!=""){
 ?>
     <div id="alert_error_wrap" class="float-alert animated fadeInRight col-xs-11 col-sm-4 alert alert-danger" style="z-index: 10000; float: right; margin-top: 10px;">
@@ -1110,7 +1110,7 @@
     </div>
 </section> 
 <?php 
-    $this->load->view("footer");
+    echo view('templates/footer');;
 ?> 
 <script type="text/javascript" src="<?php echo base_url('assets/client_assets/js/step.js'); ?>"></script>
 

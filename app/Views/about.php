@@ -1,5 +1,5 @@
 <?php 
-    $this->load->view("header");
+    echo view('templates/header');;
 ?>        
 
         <!-- 
@@ -237,7 +237,7 @@
                 </div>
             </section>
 <?php 
-    $this->load->view("footer");
+    echo view('templates/footer');;
 ?> 
 
             

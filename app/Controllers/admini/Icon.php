@@ -11,13 +11,13 @@ class Icon extends MY_Admin_Controller {
 
 	public function index()
 	{
-		$icons = $this->common_model->readDatas("icon");
-		$this->load->view('admini/icon_list.php', array("icons"=>$icons));
+		$icons = $this->commonModel->readDatas("icon");
+		return view('admini/icon_list.php', array("icons"=>$icons));
 	}
 
 	public function Add()
 	{
-		$this->load->view('admini/icon_create.php');
+		return view('admini/icon_create.php');
 	}
 
 	public function uploadIcon(){
@@ -41,7 +41,7 @@ class Icon extends MY_Admin_Controller {
             //upload file to server
             if(move_uploaded_file($_FILES["file_name"]["tmp_name"], $targetFilePath)){
                 $insertData['file_name'] = $fileName;
-                $this->common_model->createData("icon",$insertData);
+                $this->commonModel->createData("icon",$insertData);
                 redirect(site_url()."admini/icon");
             }else{
                 $error = 'err';
@@ -56,7 +56,7 @@ class Icon extends MY_Admin_Controller {
  	
  	public function deleteicon(){
  		$id = $this->input->post("icon_id");
- 		$this->common_model->deleteData("icon",array("id"=>$id));
+ 		$this->commonModel->deleteData("icon",array("id"=>$id));
  		redirect(site_url()."admini/icon");
  	}
 
@@ -67,7 +67,7 @@ class Icon extends MY_Admin_Controller {
  		// exit;
 		$updateData = $this->input->post();
 
-		$icon_data = $this->common_model->readData("icon",array("id"=>$updateData['id']));
+		$icon_data = $this->commonModel->readData("icon",array("id"=>$updateData['id']));
 		 
 		if($this->input->post("status")=="on") $updateData['status'] = 1; else $updateData['status'] = 0;
 
@@ -88,7 +88,7 @@ class Icon extends MY_Admin_Controller {
 	            //upload file to server
 	            if(move_uploaded_file($_FILES["file_name"]["tmp_name"], $targetFilePath)){
 	                $updateData['file_name'] = $fileName;
-	                $this->common_model->updateData("icon",$updateData,array("id"=>$id));
+	                $this->commonModel->updateData("icon",$updateData,array("id"=>$id));
 	                redirect(site_url()."admini/icon");
 	            }else{
 	                $error = 'err';
@@ -101,7 +101,7 @@ class Icon extends MY_Admin_Controller {
 	    } else {
 			// $updateData['imagename'] = $updateData['imagenamesave'];
 
-	        $this->common_model->updateData("icon",$updateData,array("id"=>$id));
+	        $this->commonModel->updateData("icon",$updateData,array("id"=>$id));
             redirect(site_url()."admini/icon");
 	    }
 
@@ -111,19 +111,19 @@ class Icon extends MY_Admin_Controller {
 
 	public function geticonData(){
 		$id = $this->input->post("id");
-		$row = $this->common_model->readData("icon",array("id"=>$id));
+		$row = $this->commonModel->readData("icon",array("id"=>$id));
 		echo json_encode(array("data"=>$row));
 	}
 
 	public function deleteiconData(){
 		$id = $this->input->post("id");
-		$this->common_model->deleteData("icon",array("id"=>$id));
+		$this->commonModel->deleteData("icon",array("id"=>$id));
 		echo json_encode(array("data"=>"OK"));
 	}
 
 	public function profile(){
-		$icon = $this->common_model->readData("icon",array("id"=>$this->session->icondata("admin_id")));
-		$this->load->view("admini/profile",array("icon"=>$icon,"error"=>""));
+		$icon = $this->commonModel->readData("icon",array("id"=>$this->session->icondata("admin_id")));
+		return view("admini/profile",array("icon"=>$icon,"error"=>""));
 	}
 
 	public function updateProfile(){
@@ -131,7 +131,7 @@ class Icon extends MY_Admin_Controller {
  		// exit;
 		$updateData = $this->input->post();
 
-		$icon_data = $this->common_model->readData("icon",array("id"=>$updateData['id']));
+		$icon_data = $this->commonModel->readData("icon",array("id"=>$updateData['id']));
 		 
 
 		$id = $updateData['id'];
@@ -151,7 +151,7 @@ class Icon extends MY_Admin_Controller {
 	            //upload file to server
 	            if(move_uploaded_file($_FILES["file_name"]["tmp_name"], $targetFilePath)){
 	                $updateData['file_name'] = $fileName;
-	                $this->common_model->updateData("icon",$updateData,array("id"=>$id));
+	                $this->commonModel->updateData("icon",$updateData,array("id"=>$id));
 	                redirect(site_url()."admini/icon/profile");
 	            }else{
 	                $error = 'err';
@@ -164,7 +164,7 @@ class Icon extends MY_Admin_Controller {
 	    } else {
 			// $updateData['imagename'] = $updateData['imagenamesave'];
 
-	        $this->common_model->updateData("icon",$updateData,array("id"=>$id));
+	        $this->commonModel->updateData("icon",$updateData,array("id"=>$id));
             redirect(site_url()."admini/icon/profile");
 	    }
 
@@ -173,15 +173,15 @@ class Icon extends MY_Admin_Controller {
 	}
 
 	public function updateAccount(){
-		$data = $this->input->post();
-		$icon_data = $this->common_model->readData("icon",array("id"=>$this->session->icondata("admin_id")));
+		$data = $this->request->getPost();
+		$icon_data = $this->commonModel->readData("icon",array("id"=>$this->session->icondata("admin_id")));
 		$err = "";
 		if($icon_data['password']!=md5($data['old_password'])) $err = "Old Password is not correct!";
 		if($data['new_password']!=$data['con_password']) $err = "No mached new password!";
 		if($err!=""){
-			$this->common_model->updateData("icon",array("password"=>md5($data['new_password'])),array("id"=>$this->session->icondata("admin_id")));
+			$this->commonModel->updateData("icon",array("password"=>md5($data['new_password'])),array("id"=>$this->session->icondata("admin_id")));
 		}
-		$this->load->view("admini/profile",array("icon"=>$icon_data,"error"=>$err));
+		return view("admini/profile",array("icon"=>$icon_data,"error"=>$err));
 
 	}
 

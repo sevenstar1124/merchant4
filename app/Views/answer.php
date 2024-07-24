@@ -1,5 +1,5 @@
 <?php 
-    $this->load->view("header");
+    echo view('templates/header');;
 ?>        
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="<?php echo base_url("assets/editor/css/froala_editor.css"); ?>">
@@ -169,7 +169,7 @@
                 </div>
             </section>
 <?php 
-    $this->load->view("footer");
+    echo view('templates/footer');;
 ?> 
 
  

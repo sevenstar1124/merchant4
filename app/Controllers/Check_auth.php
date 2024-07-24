@@ -12,7 +12,7 @@ class Check_auth extends Controller
 		// Authorize.net lib
 		$this->load->library('authorize_net');
 
-	    $data = $this->input->post();
+	    $data = $this->request->getPost();
 		
 		$row = get_rows("transaction",array("publish_key"=>$data['publish_key']),"date DESC",array("date"=>date("Y-m-d H:i")));
 	    if($row){
@@ -67,7 +67,7 @@ class Check_auth extends Controller
 			// echo '<p>Transaction ID: ' . $this->authorize_net->getTransactionId() . '</p>';
 			// echo '<p>Approval Code: ' . $this->authorize_net->getApprovalCode() . '</p>';
 			$amount = $data['price'];
-            $getway = $this->common_model->readData("paymentgetway",array("id"=>1));
+            $getway = $this->commonModel->readData("paymentgetway",array("id"=>1));
 
             // $balance_transaction = $chargeJson['balance_transaction'];
             // $currency = $chargeJson['currency'];
@@ -81,11 +81,11 @@ class Check_auth extends Controller
             $data['payment_type'] = "checkout";
             $data['checkout_fee'] = $getway['checkout_fee'];
             // $data['card_number'] = $this->
-            $row = $this->common_model->createData("transaction",$data);
+            $row = $this->commonModel->createData("transaction",$data);
             $user = get_row("member",array("id"=>$data['user_id']));
             $balance = $user['balance'];
             $balance += $data['price'] - $data['fee'];
-            $this->common_model->updateData("member",array("balance"=>$balance),array("id"=>$data['user_id']));
+            $this->commonModel->updateData("member",array("balance"=>$balance),array("id"=>$data['user_id']));
 
             $customer_name = $data['first_name']." ".$data['last_name'];
             $product = get_row("product",array("publish_key"=>$data['publish_key']));

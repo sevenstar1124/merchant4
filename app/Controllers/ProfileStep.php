@@ -24,7 +24,7 @@ class ProfileStep extends Controller
     {
         // Call the Model constructor
         parent::__construct();
-        if(!$this->session->userdata("member_id")) {
+        if(!$this->session->get("member_id")) {
             redirect(base_url("login"));
         }
         $this->load->library('session');
@@ -33,12 +33,12 @@ class ProfileStep extends Controller
     }
 
     public function index(){   
-        $this->load->view("profile_step");
+        return view("profile_step");
     }
 
     public function saveStep(){
         $this->load->model('common_model');
-        $data = $this->input->post();
+        $data = $this->request->getPost();
         unset($data['bank_deposit_account_confirm']);
         if(isset($data['delivery_method'])){
             $data['delivery_method'] = implode(',', $data['delivery_method']);
@@ -46,7 +46,7 @@ class ProfileStep extends Controller
         if(isset($data['market_method'])){
             $data['market_method'] = implode(',', $data['market_method']);
         }
-        $data['member_id'] = $this->session->userdata("member_id");
+        $data['member_id'] = $this->session->get("member_id");
         foreach ($data as $key => $value) {
             if($value == "on") $data[$key] = 1;
         }
@@ -54,11 +54,11 @@ class ProfileStep extends Controller
         if(!isset($data['second_owner'])) $data['second_owner'] = 0;
         if(!isset($data['owner2_us_city'])) $data['owner2_us_city'] = 0;
         if($data['phase_status'] == 6) $data['status'] = 1;
-        $member_data = get_row("member_data",array("member_id"=>$this->session->userdata("member_id")));
+        $member_data = get_row('member',array("member_id"=>$this->session->get("member_id")));
         if($member_data == array()){
-            $res = $this->common_model->createData("member_data",$data);
+            $res = $this->commonModel->createData("member_data",$data);
         } else {
-            $res = $this->common_model->updateData("member_data",$data, array("id"=>$member_data['id']));
+            $res = $this->commonModel->updateData("member_data",$data, array("id"=>$member_data['id']));
         }
         echo json_encode(array('status'=>"ok"));
     }

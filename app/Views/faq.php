@@ -1,5 +1,5 @@
 <?php 
-    $this->load->view("header");
+    echo view('templates/header');
 ?>        
   <link rel="stylesheet" href="<?php echo base_url("assets/css/vendor.css?v=2.1.1"); ?>">
 
@@ -121,7 +121,7 @@
                 </div>
             </section>
 <?php 
-    $this->load->view("footer");
+    echo view('templates/footer');
 ?> 
 
 

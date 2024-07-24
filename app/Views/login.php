@@ -376,7 +376,7 @@ About Section Start
  
 
 <?php 
-    $this->load->view("footer");
+    echo view('templates/footer');;
 ?> 
 
             

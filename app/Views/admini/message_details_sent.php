@@ -1,5 +1,5 @@
 <?php
-	$this->load->view('common/header.php');
+	echo view('common/header.php');
 ?>
        
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -110,7 +110,7 @@
 
 
 <?php
-	$this->load->view('common/footer.php');
+	echo view('common/footer.php');
 ?>
  
 <script type="text/javascript">

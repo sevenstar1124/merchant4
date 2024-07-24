@@ -2,140 +2,127 @@
 
 namespace App\Controllers;
 
-class Help extends MY_Controller
+use App\Models\CommonModel;
+
+class Help extends My_Controller
 {
-    /**
-     * Index Page for this controller.
-     *
-     * Maps to the following URL
-     * 		http://example.com/index.php/welcome
-     *	- or -
-     * 		http://example.com/index.php/welcome/index
-     *	- or -
-     * Since this controller is set as the default controller in
-     * config/routes.php, it's displayed at http://example.com/
-     *
-     * So any other public methods not prefixed with an underscore will
-     * map to /index.php/welcome/<method_name>
-     *
-     * @see http://codeigniter.com/user_guide/general/urls.html
-     */
+    protected $commonModel;
+    protected $session;
+
     public function __construct()
     {
-        // Call the Model constructor
-        parent::__construct();
-        $this->load->library('session');
-        $this->load->helper('form');
-        $this->load->helper('url');
+        $this->session = session();
+        helper(['form', 'url']);
+        $this->commonModel = new CommonModel();
+    }
+    public function index()
+    {
+        return view("home");
+    }
+    public function get_support()
+    {
+        return view("get_support");
+    }
+    public function faq()
+    {
+        return view("faq");
+    }
+    public function answer($id = "")
+    {
+        return view("answer", array("id" => $id));
+    }
+    public function thanks()
+    {
+        return view("thanks");
     }
 
-    public function index(){   
-
-        $this->load->view("home");
-    } 
-
-    public function get_support(){
-        $this->load->view("get_support");
-    }
-
-    public function faq(){
-        $this->load->view("faq");
-    }
-
-    public function create_question(){
-        $this->load->model("common_model");
-        $data = $this->input->post();
-        $id = $data['id'];
+    public function create_question()
+    {
+        $data = $this->request->getPost();
+        $id = $data['id'] ?? null;
         unset($data['id']);
         $data['status'] = 1;
-        if($id!=""){
-            $res = get_row("questions",array("id"=>$id));
-            $this->common_model->updateData("questions",$data,array("id"=>$id));
-            if($res['status'] == 0){
 
-                $template = get_row("email_template",array("id"=>9));
+        if ($id !== null) {
+            $res = $this->commonModel->getRow("questions", ['id' => $id]);
+            $this->commonModel->updateData("questions", $data, ['id' => $id]);
+
+            if ($res['status'] == 0) {
+                $template = $this->commonModel->getRow("email_template", ['id' => 9]);
                 $subject = $template['subject'];
                 $body = nl2br($template['body']);
-                $user = get_row("member",array("id"=>$this->session->userdata("member_id")));
-                $user_name = $user['first_name']." ".$user['last_name'];
-                $ticket_datais = "";
-                $ticket_datais.= "<b>Ticket ID </b> : #".$id."<br/>";
-                $tag = get_row("help_tag",array("id"=>$data['tag_id']));
-                $ticket_datais.= "<b>Issue Type </b> : ".$tag['title']."<br/>";
-                $ticket_datais.= "<b>Title </b> : ".$data['title']."<br/>";
-                $ticket_datais.= "<b>Content </b> :<br/>";
-                $ticket_datais.= "<div>".$data['content']."</div>";
-                $ticket_url = '<a href="'.base_url("admini/help/answer/".$id).'">Ticket URL</a>';
+                $user = $this->commonModel->getRow("member", ['id' => $this->session->get('member_id')]);
+                $user_name = $user['first_name'] . " " . $user['last_name'];
+                $ticket_data = "<b>Ticket ID </b> : #$id<br/>";
+                $tag = $this->commonModel->getRow("help_tag", ['id' => $data['tag_id']]);
+                $ticket_data .= "<b>Issue Type </b> : " . $tag['title'] . "<br/>";
+                $ticket_data .= "<b>Title </b> : " . $data['title'] . "<br/>";
+                $ticket_data .= "<b>Content </b> :<br/><div>" . $data['content'] . "</div>";
+                $ticket_url = '<a href="' . base_url("admini/help/answer/$id") . '">Ticket URL</a>';
+
                 $body = str_replace("{#merchant_name}", $user_name, $body);
-                $body = str_replace("{#ticket_details}", $ticket_datais, $body);
+                $body = str_replace("{#ticket_details}", $ticket_data, $body);
                 $body = str_replace("{#ticket_url}", $ticket_url, $body);
-                sendMail_to_admin($user['email'],$subject,$body,$this->session->userdata("member_id"));
-                redirect(base_url("help/thanks"));
-                exit;
+
+                sendMail_to_admin($user['email'], $subject, $body, $this->session->get('member_id'));
+                return redirect()->to(base_url("help/thanks"));
             }
-            $this->session->set_userdata("success","Successfully updated question");
-
-
+            $this->session->setFlashdata('success', 'Successfully updated question');
         } else {
-            $data['user_id'] = $this->session->userdata("member_id");
+            $data['user_id'] = $this->session->get('member_id');
             $data['date'] = date("Y-m-d H:i:s");
-            $this->common_model->createData("questions",$data);
-            $this->session->set_userdata("success","Successfully created new question");
-
+            $this->commonModel->createData("questions", $data);
+            $this->session->setFlashdata('success', 'Successfully created new question');
         }
-        redirect(base_url("help/faq"));
+
+        return redirect()->to(base_url("help/faq"));
     }
 
- 
+    public function before_question()
+    {
+        $res = $this->commonModel->getRow("questions", [
+            'user_id' => $this->session->get('member_id'),
+            'status' => 0
+        ]);
 
-    public function before_question(){
-        // $this->common_model->deleteData("questions",array("user_id"=>$this->session->userdata("member_id"), 'status'=>0));
-        $res = get_row("questions",array("user_id"=>$this->session->userdata("member_id"), 'status'=>0));
-        if($res){
-
-        } else {
-            $data = array("user_id"=>$this->session->userdata("member_id"));
-            $data['date'] = date("Y-m-d H:i:s");
-            $res = $this->common_model->createData("questions",$data);
+        if (!$res) {
+            $data = [
+                'user_id' => $this->session->get('member_id'),
+                'date' => date("Y-m-d H:i:s")
+            ];
+            $res = $this->commonModel->createData("questions", $data);
         }
-        echo json_encode(array("data"=>$res));
+
+        return $this->response->setJSON(['data' => $res]);
     }
 
-    public function get_question(){
-        $id = $this->input->post("id");
-        $data = get_row("questions",array("id"=>$id));
-        echo json_encode(array("data"=>$data));
+    public function get_question()
+    {
+        $id = $this->request->getPost('id');
+        $data = $this->commonModel->getRow("questions", ['id' => $id]);
+        return $this->response->setJSON(['data' => $data]);
     }
 
-    public function remove_question(){
-        $id = $this->input->post("id");
-        $this->load->model("common_model");
-        $this->common_model->deleteData("questions",array("id"=>$id));
-        $this->session->set_userdata("success","Successfully deleted");
-        echo json_encode(array("res"=>"ok"));
-        exit;
+    public function remove_question()
+    {
+        $id = $this->request->getPost('id');
+        $this->commonModel->deleteData("questions", ['id' => $id]);
+        $this->session->setFlashdata('success', 'Successfully deleted');
+        return $this->response->setJSON(['res' => 'ok']);
     }
 
-    public function answer($id=""){
-        $this->load->view("answer",array("id"=>$id));
-    }
-
-    public function save_answer(){
-
-        $data = $this->input->post();
+    public function save_answer()
+    {
+        $data = $this->request->getPost();
         $url = $data['url'];
         unset($data['url']);
 
         $data['date'] = date("Y-m-d H:i:s");
-        $data['user_id'] = $this->session->userdata("member_id");
-        $data['user_type']="member";
-        $this->load->model("common_model");
-        $this->common_model->createData("answers",$data);
-        $this->session->set_userdata("success","Successfully posted your answer");
-        redirect(base_url($url));
-    }
+        $data['user_id'] = $this->session->get('member_id');
+        $data['user_type'] = "member";
 
-    public function thanks(){
-        $this->load->view("thanks");
+        $this->commonModel->createData("answers", $data);
+        $this->session->setFlashdata('success', 'Successfully posted your answer');
+        return redirect()->to(base_url($url));
     }
 }

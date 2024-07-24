@@ -32,6 +32,6 @@ class About extends Controller
 
     public function index(){   
 
-        $this->load->view("about");
+        return view("about");
     }
 }

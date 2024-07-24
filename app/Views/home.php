@@ -47,7 +47,7 @@ echo view("templates/header");
                     <h2>virsympay reports</h2>
                     <ol class="breadcrumb">
                         <li>
-                            <a href="<?php echo base_url("home"); ?>">
+                            <a href="<?php echo base_url(''); ?>">
                                 Reports
                             </a>
                         </li>

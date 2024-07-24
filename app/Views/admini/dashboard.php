@@ -1,5 +1,5 @@
 <?php
-  $this->load->view("common/header.php");
+  echo view("common/header.php");
 ?>
 <style type="text/css">
 
@@ -393,7 +393,7 @@
 
 
 <?php
-	$this->load->view("common/footer.php");
+	echo view("common/footer.php");
 ?>
 <script src="<?php echo base_url("assets/code/highstock.js"); ?>"></script>
 <script src="<?php echo base_url("assets/code/modules/exporting.js"); ?>"></script>

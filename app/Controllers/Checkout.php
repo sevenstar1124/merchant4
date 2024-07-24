@@ -30,25 +30,25 @@ class Checkout extends Controller
     }
 
     public function index(){   
-        $this->load->view("checkout");
+        return view("checkout");
     }
 
     public function bankCheckout(){   
-        $this->load->view("checkout_bank");
+        return view("checkout_bank");
     }
     public function cardCheckout(){
-        $this->load->view("checkout_card");
+        return view("checkout_card");
     }
    
     public function pay()
     {   
 
         $checkout_type = $_POST['checkout_type'];
-        $getway = $this->common_model->readData("paymentgetway",array("id"=>1));
+        $getway = $this->commonModel->readData("paymentgetway",array("id"=>1));
 
         try {
             if($checkout_type == "bank"){
-                $data = $this->input->post();
+                $data = $this->request->getPost();
 
                 $curl = curl_init();
 
@@ -144,12 +144,12 @@ class Checkout extends Controller
                     $data['order_id'] = $response['check']['check_id'];
                     $data['checkout_type'] = "eCheck";
                     // $data['card_number'] = $this->
-                    $row = $this->common_model->createData("transaction",$data);
+                    $row = $this->commonModel->createData("transaction",$data);
 
                     $user = get_row("member",array("id"=>$data['user_id']));
                     $balance = $user['balance'];
                     $balance += $data['price'] - $data['fee'];
-                    $this->common_model->updateData("member",array("balance"=>$balance),array("id"=>$data['user_id']));
+                    $this->commonModel->updateData("member",array("balance"=>$balance),array("id"=>$data['user_id']));
 
                     $customer_name = $data['first_name'];
                     $product = get_row("product",array("publish_key"=>$data['publish_key']));
@@ -212,7 +212,7 @@ class Checkout extends Controller
 
             }
             if($checkout_type == "card"){   
-                $data = $this->input->post();
+                $data = $this->request->getPost();
 
                 $curl = curl_init();
  
@@ -301,12 +301,12 @@ class Checkout extends Controller
 
                     $data['order_id'] = $response['transaction_id'];
                     $data['checkout_type'] = "card";
-                    $row = $this->common_model->createData("transaction",$data);
+                    $row = $this->commonModel->createData("transaction",$data);
 
                     $user = get_row("member",array("id"=>$data['user_id']));
                     $balance = $user['balance'];
                     $balance += $data['price'] - $data['fee'];
-                    $this->common_model->updateData("member",array("balance"=>$balance),array("id"=>$data['user_id']));
+                    $this->commonModel->updateData("member",array("balance"=>$balance),array("id"=>$data['user_id']));
 
                     $customer_name = $data['first_name']." ".$data['last_name'];
                     $product = get_row("product",array("publish_key"=>$data['publish_key']));

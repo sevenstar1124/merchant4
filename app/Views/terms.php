@@ -1,5 +1,5 @@
 <?php 
-    $this->load->view("header");
+    echo view('templates/header');;
 ?>        
   <link rel="stylesheet" href="<?php echo base_url("assets/css/vendor.css?v=2.1.1"); ?>">
 
@@ -38,7 +38,7 @@
                             <h2>PAYMENT PROCESSING SERVICE AGREEMENT </h2>
                             <ol class="breadcrumb">
                                 <li>
-                                    <a href="<?php echo base_url("home"); ?>">
+                                    <a href="<?php echo base_url(''); ?>">
                                        VIRSYMPAY.COM
                                     </a>
                                 </li>
@@ -80,5 +80,5 @@
                 </div>
             </section>
 <?php 
-    $this->load->view("footer");
+    echo view('templates/footer');;
 ?>  

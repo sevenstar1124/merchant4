@@ -13,23 +13,23 @@ class Help extends MY_Admin_Controller {
 	{
 	 
 		
-		$this->load->view("admini/dashboard");
-	 	// $this->load->view('front/carsearch.php',array("searchDate"=>$insertData));
+		return view("admini/dashboard");
+	 	// return view('front/carsearch.php',array("searchDate"=>$insertData));
 
 	}
 
  	public function create_question(){
         $this->load->model("common_model");
-        $data = $this->input->post();
+        $data = $this->request->getPost();
         $id = $data['id'];
         unset($data['id']);
         if($id!=""){
-            $this->common_model->updateData("questions",$data,array("id"=>$id));
+            $this->commonModel->updateData("questions",$data,array("id"=>$id));
 
         } else {
-            $data['user_id'] = $this->session->userdata("member_id");
+            $data['user_id'] = $this->session->get("member_id");
             $data['date'] = date("Y-m-d H:i:s");
-            $this->common_model->createData("questions",$data);
+            $this->commonModel->createData("questions",$data);
 
         }
         redirect(base_url("admini/help/faq"));
@@ -37,29 +37,29 @@ class Help extends MY_Admin_Controller {
 
 
     public function get_support($tag_id=""){
-    	$this->load->view("admini/get_support",array("tag_id"=>$tag_id));
+    	return view("admini/get_support",array("tag_id"=>$tag_id));
     }
 
     public function faq(){
-        $this->load->view("admini/faq");
+        return view("admini/faq");
     }
 
       
     public function remove_ticket(){
         $id = $this->input->post("id");
         $this->load->model("common_model");
-        $this->common_model->deleteData("help_ticket",array("id"=>$id));
+        $this->commonModel->deleteData("help_ticket",array("id"=>$id));
         echo json_encode(array("res"=>"ok"));
         exit;
     }
 
     public function answer($id=""){
-        $this->load->view("admini/answer",array("id"=>$id));
+        return view("admini/answer",array("id"=>$id));
     }
 
     public function save_answer(){
 
-        $data = $this->input->post();
+        $data = $this->request->getPost();
         $url = $data['url'];
         unset($data['url']);
 
@@ -67,13 +67,13 @@ class Help extends MY_Admin_Controller {
         $data['user_id'] = "";
         $data['user_type']="admin";
         $this->load->model("common_model");
-        $this->common_model->createData("answers",$data);
+        $this->commonModel->createData("answers",$data);
         redirect(base_url($url));
     }
     public function remove_answer(){
     	$id = $this->input->post("id");
     	$this->load->model("common_model");
-    	$this->common_model->deleteData("answers",array("id"=>$id));
+    	$this->commonModel->deleteData("answers",array("id"=>$id));
     	echo json_encode(array("status"=>"ok"));
     }
 
@@ -82,10 +82,10 @@ class Help extends MY_Admin_Controller {
     	$id = $this->input->post("id");
     	$this->load->model("common_model");
     	if($id==""){
-    		$res = $this->common_model->createData("help_tag",array("title"=>$title));
+    		$res = $this->commonModel->createData("help_tag",array("title"=>$title));
     		$id = $res['id'];
     	} else {
-    		$this->common_model->updateData("help_tag",array("title"=>$title),array("id"=>$id));
+    		$this->commonModel->updateData("help_tag",array("title"=>$title),array("id"=>$id));
     	}
     	redirect(base_url("admini/help/get_support/".$id));
     }
@@ -104,19 +104,19 @@ class Help extends MY_Admin_Controller {
     public function remove_tag(){
     	$id = $this->input->post("id");
     	$this->load->model("common_model");
-    	$this->common_model->deleteData("help_tag",array("id"=>$id));
+    	$this->commonModel->deleteData("help_tag",array("id"=>$id));
     	echo json_encode(array("status"=>"OK"));
     }
 
     public function create_ticket(){
-    	$data = $this->input->post();
+    	$data = $this->request->getPost();
     	$id = $data['id'];
     	unset($data['id']);
     	$this->load->model("common_model");
     	if($id == ""){
-    		$this->common_model->createData("help_ticket",$data);
+    		$this->commonModel->createData("help_ticket",$data);
     	} else {
-    		$this->common_model->updateData("help_ticket",$data,array("id"=>$id));
+    		$this->commonModel->updateData("help_ticket",$data,array("id"=>$id));
     	}
     	redirect(base_url("admini/help/get_support/".$data['tag_id']));
     }

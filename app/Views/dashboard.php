@@ -1,5 +1,5 @@
 <?php 
-    $this->load->view("header");
+    echo view('templates/header');;
 ?>   
 <section id="about">
     <div class="container">
@@ -135,7 +135,7 @@ Call To Action Section Start
 
 
 <?php 
-    $this->load->view("footer");
+    echo view('templates/footer');;
 ?> 
 
             

@@ -13,21 +13,21 @@ class Inbox extends MY_Admin_Controller {
 	{
 		$id = isset($_REQUEST['id'])?$_REQUEST['id']:'';
 		if($id == "")
-		 	$this->load->view("admini/inbox");
+		 	return view("admini/inbox");
 		else 
-       	 	$this->load->view("admini/message_details",array("id"=>$id));
+       	 	return view("admini/message_details",array("id"=>$id));
 
 	}
  
  	public function message_details($id=""){
-        // $this->common_model->updateData("message",array("status"=>2),array("id"=>$id));
-        $this->load->view("admini/message_details",array("id"=>$id));
+        // $this->commonModel->updateData("message",array("status"=>2),array("id"=>$id));
+        return view("admini/message_details",array("id"=>$id));
 
     }
 
     public function message_remove($id=""){
         if($id!=""){
-            $this->common_model->deleteData("message",array("id"=>$id));
+            $this->commonModel->deleteData("message",array("id"=>$id));
             $this->session->set_userdata("success","Successfully deleted message.");
         }
         redirect(base_url("admini/inbox"));

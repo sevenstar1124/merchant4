@@ -1,5 +1,5 @@
 <?php
-	$this->load->view('common/header.php');
+	echo view('common/header.php');
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url();  ?>assets/css/color-picker.min.css">    
     
@@ -138,7 +138,7 @@
 
 
 <?php
-	$this->load->view('common/footer.php');
+	echo view('common/footer.php');
 ?>
 <script type="text/javascript" src="<?php echo base_url();  ?>assets/js/color-picker.min.js"></script>
  

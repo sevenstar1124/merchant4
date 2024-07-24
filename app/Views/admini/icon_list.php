@@ -1,5 +1,5 @@
 <?php
-	$this->load->view('common/header.php');
+	echo view('common/header.php');
 ?>
 <style type="text/css">
   #image-preview{
@@ -223,7 +223,7 @@
 </div>
 
 <?php
-	$this->load->view('common/footer.php');
+	echo view('common/footer.php');
 ?>
 <script >
 

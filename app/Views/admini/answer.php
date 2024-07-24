@@ -1,5 +1,5 @@
 <?php
-	$this->load->view('common/header.php');
+	echo view('common/header.php');
 ?>
    
 <style type="text/css">
@@ -136,7 +136,7 @@
 
 
 <?php
-	$this->load->view('common/footer.php');
+	echo view('common/footer.php');
 ?>
   
   <script type="text/javascript" src="<?php echo base_url("assets/client_assets/js/ckeditor.js"); ?>" ></script>

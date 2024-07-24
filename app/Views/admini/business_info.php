@@ -1,6 +1,6 @@
 <?php
-	$this->load->view('common/header.php');
-  $member_data = get_row("member_data",array("member_id"=>$member_id));
+	echo view('common/header.php');
+  $member_data = get_row('member',array("member_id"=>$member_id));
 ?>
 <link rel="stylesheet" href="<?php echo base_url('assets/client_assets/css/step.css'); ?>">
 <style type="text/css">
@@ -973,7 +973,7 @@
        
         </div> 
 <?php
-	$this->load->view('common/footer.php');
+	echo view('common/footer.php');
 ?>
 <script type="text/javascript" src="<?php echo base_url('assets/client_assets/js/step.js'); ?>"></script>
 <script >

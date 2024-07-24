@@ -1,5 +1,5 @@
 <?php
-	$this->load->view('common/header.php');
+	echo view('common/header.php');
 ?>
        
   
@@ -99,7 +99,7 @@
 
 <input type="hidden" name="" id="tag_id" value="<?php echo $tag_id; ?>">
 <?php
-	$this->load->view('common/footer.php');
+	echo view('common/footer.php');
 ?>
  
 

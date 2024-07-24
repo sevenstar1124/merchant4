@@ -297,7 +297,7 @@ Header Section Start
 
                 <!-- logo -->
                 <div class="navbar-brand">
-                    <a href="<?php echo base_url("home"); ?>">
+                    <a href="<?php echo base_url(''); ?>">
                         <img src="<?php echo base_url('assets/client_assets/images/logo.png'); ?>" alt="" style="height: 50px;">
                     </a>
                 </div>
@@ -309,7 +309,7 @@ Header Section Start
                     <ul class="nav navbar-nav navbar-right">
 
 
-                        <li><a href="<?php echo site_url("home"); ?>">Reports</a></li>
+                        <li><a href="<?php echo site_url(''); ?>">Reports</a></li>
 
 
                         <li class="dropdown">

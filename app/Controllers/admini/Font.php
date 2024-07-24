@@ -11,13 +11,13 @@ class Font extends MY_Admin_Controller {
 
 	public function index()
 	{
-		$fonts = $this->common_model->readDatas("font");
-		$this->load->view('admini/font_list.php', array("fonts"=>$fonts));
+		$fonts = $this->commonModel->readDatas("font");
+		return view('admini/font_list.php', array("fonts"=>$fonts));
 	}
 
 	public function Add()
 	{
-		$this->load->view('admini/font_create.php');
+		return view('admini/font_create.php');
 	}
 
 	public function uploadfont(){
@@ -43,7 +43,7 @@ class Font extends MY_Admin_Controller {
             if(move_uploaded_file($_FILES["file_name"]["tmp_name"], $targetFilePath)){
                 $insertData['file_name'] = str_replace(" ", "_", $fileName);
 
-                $this->common_model->createData("font",$insertData);
+                $this->commonModel->createData("font",$insertData);
                 redirect(site_url()."admini/font");
             }else{
                 $error = 'err';
@@ -58,7 +58,7 @@ class Font extends MY_Admin_Controller {
  	
  	public function deletefont(){
  		$id = $this->input->post("font_id");
- 		$this->common_model->deleteData("font",array("id"=>$id));
+ 		$this->commonModel->deleteData("font",array("id"=>$id));
  		redirect(site_url()."admini/font");
  	}
 
@@ -69,7 +69,7 @@ class Font extends MY_Admin_Controller {
  		// exit;
 		$updateData = $this->input->post();
 
-		$font_data = $this->common_model->readData("font",array("id"=>$updateData['id']));
+		$font_data = $this->commonModel->readData("font",array("id"=>$updateData['id']));
 		 
 		if($this->input->post("status")=="on") $updateData['status'] = 1; else $updateData['status'] = 0;
 
@@ -90,7 +90,7 @@ class Font extends MY_Admin_Controller {
 	            //upload file to server
 	            if(move_uploaded_file($_FILES["file_name"]["tmp_name"], $targetFilePath)){
 	                $updateData['file_name'] = $fileName;
-	                $this->common_model->updateData("font",$updateData,array("id"=>$id));
+	                $this->commonModel->updateData("font",$updateData,array("id"=>$id));
 	                redirect(site_url()."admini/font");
 	            }else{
 	                $error = 'err';
@@ -103,7 +103,7 @@ class Font extends MY_Admin_Controller {
 	    } else {
 			// $updateData['imagename'] = $updateData['imagenamesave'];
 
-	        $this->common_model->updateData("font",$updateData,array("id"=>$id));
+	        $this->commonModel->updateData("font",$updateData,array("id"=>$id));
             redirect(site_url()."admini/font");
 	    }
 
@@ -113,19 +113,19 @@ class Font extends MY_Admin_Controller {
 
 	public function getfontData(){
 		$id = $this->input->post("id");
-		$row = $this->common_model->readData("font",array("id"=>$id));
+		$row = $this->commonModel->readData("font",array("id"=>$id));
 		echo json_encode(array("data"=>$row));
 	}
 
 	public function deletefontData(){
 		$id = $this->input->post("id");
-		$this->common_model->deleteData("font",array("id"=>$id));
+		$this->commonModel->deleteData("font",array("id"=>$id));
 		echo json_encode(array("data"=>"OK"));
 	}
 
 	public function profile(){
-		$font = $this->common_model->readData("font",array("id"=>$this->session->fontdata("admin_id")));
-		$this->load->view("admini/profile",array("font"=>$font,"error"=>""));
+		$font = $this->commonModel->readData("font",array("id"=>$this->session->fontdata("admin_id")));
+		return view("admini/profile",array("font"=>$font,"error"=>""));
 	}
 
 	public function updateProfile(){
@@ -133,7 +133,7 @@ class Font extends MY_Admin_Controller {
  		// exit;
 		$updateData = $this->input->post();
 
-		$font_data = $this->common_model->readData("font",array("id"=>$updateData['id']));
+		$font_data = $this->commonModel->readData("font",array("id"=>$updateData['id']));
 		 
 
 		$id = $updateData['id'];
@@ -153,7 +153,7 @@ class Font extends MY_Admin_Controller {
 	            //upload file to server
 	            if(move_uploaded_file($_FILES["file_name"]["tmp_name"], $targetFilePath)){
 	                $updateData['file_name'] = $fileName;
-	                $this->common_model->updateData("font",$updateData,array("id"=>$id));
+	                $this->commonModel->updateData("font",$updateData,array("id"=>$id));
 	                redirect(site_url()."admini/font/profile");
 	            }else{
 	                $error = 'err';
@@ -166,7 +166,7 @@ class Font extends MY_Admin_Controller {
 	    } else {
 			// $updateData['imagename'] = $updateData['imagenamesave'];
 
-	        $this->common_model->updateData("font",$updateData,array("id"=>$id));
+	        $this->commonModel->updateData("font",$updateData,array("id"=>$id));
             redirect(site_url()."admini/font/profile");
 	    }
 
@@ -175,15 +175,15 @@ class Font extends MY_Admin_Controller {
 	}
 
 	public function updateAccount(){
-		$data = $this->input->post();
-		$font_data = $this->common_model->readData("font",array("id"=>$this->session->fontdata("admin_id")));
+		$data = $this->request->getPost();
+		$font_data = $this->commonModel->readData("font",array("id"=>$this->session->fontdata("admin_id")));
 		$err = "";
 		if($font_data['password']!=md5($data['old_password'])) $err = "Old Password is not correct!";
 		if($data['new_password']!=$data['con_password']) $err = "No mached new password!";
 		if($err!=""){
-			$this->common_model->updateData("font",array("password"=>md5($data['new_password'])),array("id"=>$this->session->fontdata("admin_id")));
+			$this->commonModel->updateData("font",array("password"=>md5($data['new_password'])),array("id"=>$this->session->fontdata("admin_id")));
 		}
-		$this->load->view("admini/profile",array("font"=>$font_data,"error"=>$err));
+		return view("admini/profile",array("font"=>$font_data,"error"=>$err));
 
 	}
 

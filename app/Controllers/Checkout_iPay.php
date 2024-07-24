@@ -30,13 +30,13 @@ class Checkout_iPay extends Controller
     }
 
     public function index(){   
-        $this->load->view("checkout");
+        return view("checkout");
     }
 
     public function pay()
     {
 
-        $data = $this->input->post();
+        $data = $this->request->getPost();
         //check whether stripe token is not empty
         try {
                
@@ -52,7 +52,7 @@ class Checkout_iPay extends Controller
                         // LuhulYIzBEUfof8jDHTgztIycjRCMRRsKYLR8NQfHyfjG1QwQHGcvrduX3aScH7b
                 // Fill with real customer info
                 
-                $data = $this->input->post();
+                $data = $this->request->getPost();
                 $data['expiry_date'] = $data['expiry_date_m']." / ".$data['expiry_date_y'];
                 unset($data['expiry_date_m']); 
                 unset($data['expiry_date_y']); 
@@ -64,11 +64,11 @@ class Checkout_iPay extends Controller
                 if(strlen($card_exp_year) == 2) $card_exp_year = "20".$card_exp_year;
                 
                 $email = $data['email'];
-                // echo $this->session->userdata("email");
+                // echo $this->session->get("email");
                 // exit;
                 //include Stripe PHP library
                
-                $getway = $this->common_model->readData("paymentgetway",array("id"=>1));
+                $getway = $this->commonModel->readData("paymentgetway",array("id"=>1));
                 $itemPrice = $data['price'];
  
                 $card_data = [
@@ -102,12 +102,12 @@ class Checkout_iPay extends Controller
                     'shipping_email' => $email,
                     'shipping_phone_no' => $data['phone_number'],
                 ];
-                if($this->session->userdata("pay_date")!=""){
+                if($this->session->get("pay_date")!=""){
 
                     $date1 = strtotime(date("Y-m-d H:i:s"));
-                    $date2 = strtotime($this->session->userdata("pay_date"));
+                    $date2 = strtotime($this->session->get("pay_date"));
 
-                    if(abs($date1-$date2)<60 && $card_num == $this->session->userdata("card_number")){
+                    if(abs($date1-$date2)<60 && $card_num == $this->session->get("card_number")){
                         $product = get_row("product",array("publish_key"=>$data['publish_key']));
                         redirect($product['redirect_url']);
                         exit;
@@ -148,11 +148,11 @@ class Checkout_iPay extends Controller
                     $data['checkout_fee'] = $getway['checkout_fee'];
                     $data['order_id'] = $order_id;
                     // $data['card_number'] = $this->
-                    $row = $this->common_model->createData("transaction",$data);
+                    $row = $this->commonModel->createData("transaction",$data);
                     $user = get_row("member",array("id"=>$data['user_id']));
                     $balance = $user['balance'];
                     $balance += $data['price'] - $data['fee'];
-                    $this->common_model->updateData("member",array("balance"=>$balance),array("id"=>$data['user_id']));
+                    $this->commonModel->updateData("member",array("balance"=>$balance),array("id"=>$data['user_id']));
 
                     $customer_name = $data['first_name']." ".$data['last_name'];
                     $product = get_row("product",array("publish_key"=>$data['publish_key']));

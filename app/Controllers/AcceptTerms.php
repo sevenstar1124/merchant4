@@ -32,15 +32,15 @@ class AcceptTerms extends Controller
     }
 
     public function index(){   
-        $this->load->view("terms");
+        return view("terms");
     }
 
     public function accept(){
-        $id = $this->session->userdata("member_id");
+        $id = $this->session->get("member_id");
         $this->load->model("common_model");
-        $this->common_model->updateData("member",array("approve_status"=>1),array("id"=>$id));
+        $this->commonModel->updateData("member",array("approve_status"=>1),array("id"=>$id));
         $this->session->set_userdata("approve_status",1);
         $this->session->set_userdata("success","Your account is now under review, we contact once further action is needed, Thank you for choosing Virsympay");
-        redirect(base_url("home"));
+        redirect(base_url(''));
     }
 }

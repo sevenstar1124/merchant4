@@ -16,7 +16,7 @@ class Dashboard extends MY_Admin_Controller {
 
 	public function index()
 	{
-		$this->load->view("admini/dashboard");
+		return view("admini/dashboard");
 
 	}
 	public function get_chart_data(){
@@ -52,7 +52,7 @@ class Dashboard extends MY_Admin_Controller {
 	}
 
 	public function download_report(){
-		$data = $this->input->post();
+		$data = $this->request->getPost();
 		$date1 = strtotime($data['from_date']);
 		$from_date = date("Y-m-d",$date1);
 
@@ -97,7 +97,7 @@ class Dashboard extends MY_Admin_Controller {
 	    $download_type = $this->input->post("download_type");
 	    
 	    if($download_type == 1){
-			$html = $this->load->view('admini/'.$report_type,array("from_date"=>$from_date,"to_date"=>$to_date),TRUE);
+			$html = return view('admini/'.$report_type,array("from_date"=>$from_date,"to_date"=>$to_date),TRUE);
 		    $this->load->library('pdf');
 	        $pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
 			$pdf->SetTitle('My Title');
@@ -112,7 +112,7 @@ class Dashboard extends MY_Admin_Controller {
 			$pdf->writeHTML($html, true, false, false, false, '');
 			$pdf->Output($report_type.'.pdf', 'D');
 		} else {
-			$this->load->view('admini/'.$report_type."_excel",array("from_date"=>$from_date,"to_date"=>$to_date),TRUE);
+			return view('admini/'.$report_type."_excel",array("from_date"=>$from_date,"to_date"=>$to_date),TRUE);
 
 		}
 
@@ -257,7 +257,7 @@ class Dashboard extends MY_Admin_Controller {
 
 
 <?php
-	$this->load->view('common/footer.php');
+	return view('common/footer.php');
 ?>
 <script >
  

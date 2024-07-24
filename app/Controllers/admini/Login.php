@@ -11,21 +11,21 @@ class Login extends Controller {
 
 	public function index()
 	{
-		 $this->load->view('admini/login.php');
+		 return view('admini/login.php');
 	}
 
 	public function signup(){
 		$email = $this->input->post("email");
 		$password = $this->input->post("password");
 		$this->load->model("common_model");
-		$row = $this->common_model->readData("user",array("email"=>$email));
+		$row = $this->commonModel->readData("user",array("email"=>$email));
 		$error_msg = "";
 		if($row){
 			$error_msg = "Email is exits already. Try again.";
 			echo json_encode(array("status"=>"error","error_msg"=>$error_msg));
 			exit;
 		}
-		$res = $this->common_model->createData("user",array("firstname"=> $this->input->post("first_name"),"lastname"=> $this->input->post("last_name"), "email"=>$email, "password"=>md5($password),"date"=>date("Y-m-d h:i:s")));
+		$res = $this->commonModel->createData("user",array("firstname"=> $this->input->post("first_name"),"lastname"=> $this->input->post("last_name"), "email"=>$email, "password"=>md5($password),"date"=>date("Y-m-d h:i:s")));
 		if($res){
 			echo json_encode(array("status"=>"ok","error_msg"=>"Successfully created! After allowed from super admin, Pleas use it."));
 			exit;
@@ -39,7 +39,7 @@ class Login extends Controller {
 		$password = $this->input->post("password");
 		$password = md5($password);
 
-		$row = $this->common_model->readData("user",array("email"=>$email,"password"=>$password));
+		$row = $this->commonModel->readData("user",array("email"=>$email,"password"=>$password));
 		
 		if(!$row) $row = array();
 		if(count($row)>0) {
@@ -52,7 +52,7 @@ class Login extends Controller {
 			redirect(site_url()."admini/dashboard");
 		} 
 		else {
-		 	$this->load->view('admini/login.php');
+		 	return view('admini/login.php');
 		}
 	}
 	public function logout(){

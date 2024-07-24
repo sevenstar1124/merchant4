@@ -1,5 +1,5 @@
 <?php
-	$this->load->view('common/header.php');
+	echo view('common/header.php');
 ?>
         <!-- page content -->
         <div class="right_col" role="main">
@@ -171,7 +171,7 @@
 
 
 <?php
-	$this->load->view('common/footer.php');
+	echo view('common/footer.php');
 ?>
 <script >
 

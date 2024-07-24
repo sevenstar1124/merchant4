@@ -5,7 +5,7 @@ class Stripe extends Controller {
 
 	public function index()
 	{
-		$this->load->view('product_form');		
+		return view('product_form');		
 	}
 
 	public function check()
@@ -25,18 +25,18 @@ class Stripe extends Controller {
 			$card_exp_month = $exp_date[0];
 			$card_exp_year =  $exp_date[1];
 			
-			if($this->session->userdata("email")){
-				$email = $this->session->userdata("email");
+			if($this->session->get("email")){
+				$email = $this->session->get("email");
 			}
 
-			// echo $this->session->userdata("email");
+			// echo $this->session->get("email");
 			// exit;
 			//include Stripe PHP library
 			require_once APPPATH."third_party/stripe/init.php";
 			
 			//set api key
   			
-  			$getway = $this->common_model->readData("paymentgetway",array("id"=>1));
+  			$getway = $this->commonModel->readData("paymentgetway",array("id"=>1));
 
 			$stripe = array(
 			  "secret_key"      => $getway['stripe_secret_key'],
@@ -54,13 +54,13 @@ class Stripe extends Controller {
 			//item information
 			$itemName = "Stripe Donation";
 
-			$getway = $this->common_model->readData("paymentgetway",array("id"=>1));
+			$getway = $this->commonModel->readData("paymentgetway",array("id"=>1));
 
 			$itemNumber = "SN".date("ymdhis");
 			$itemPrice = $getway['service_fee'];
 			$currency = "eur";
 			$orderID = "SKA92712382139";
-			$id = $this->session->userdata("user_id");
+			$id = $this->session->get("user_id");
 			$itemPrice *= 100;
 			
 			//charge a credit or a debit card
@@ -86,23 +86,23 @@ class Stripe extends Controller {
 				$currency = $chargeJson['currency'];
 				$status = $chargeJson['status'];
 
-				if(!$this->session->userdata("user_id")){
-					$member = $this->common_model->readData("member", array("email"=>$email,"password"=>$password));
+				if(!$this->session->get("user_id")){
+					$member = $this->commonModel->readData("member", array("email"=>$email,"password"=>$password));
 					if(!$member){
 						$insertData = array();
 						$insertData['email'] = $email;
 						$insertData['password'] = $password;
 						$insertData['user_name'] = $name;
 						$insertData['date'] = date("Y-m-d H:i:s");
-						$member = $this->common_model->createData("member",$insertData);
+						$member = $this->commonModel->createData("member",$insertData);
 					}
 					$this->session->set_userdata("user_id",$member['id']);
 				}
 
 
 				$insertData = array();
-	            $insertData['member_id'] = $this->session->userdata("user_id");
-	            $template = $this->common_model->readData("template",array("id"=>1));
+	            $insertData['member_id'] = $this->session->get("user_id");
+	            $template = $this->commonModel->readData("template",array("id"=>1));
 
 	            $insertData['content'] = $template['content'];
 	            $insertData['icon_content'] = $template['icon_content'];
@@ -112,30 +112,30 @@ class Stripe extends Controller {
 	            $insertData['payment_id'] = $itemNumber;
 	            $insertData['payment_type'] = "Stripe Card";
 
-	            $this->common_model->createData("transaction",$insertData);
+	            $this->commonModel->createData("transaction",$insertData);
 
 
-	           //  $this->common_model->updateData("carbooking",array("status"=>2),array("id"=>$id));
+	           //  $this->commonModel->updateData("carbooking",array("status"=>2),array("id"=>$id));
               	
-            //   	$booking_data = $this->common_model->readData("carbooking",array("id"=>$id));
-	           //  $custom_email_data = $this->common_model->readData("email_templates",array("template_name"=>"to customer when complete rental"));
-	           //  $customer_data = $this->common_model->readData("member",array("id"=>$booking_data['custom_id']));
-	           //  $car_data = $this->common_model->readData("cars",array("id"=>$booking_data['car_id']));
+            //   	$booking_data = $this->commonModel->readData("carbooking",array("id"=>$id));
+	           //  $custom_email_data = $this->commonModel->readData("email_templates",array("template_name"=>"to customer when complete rental"));
+	           //  $customer_data = $this->commonModel->readData("member",array("id"=>$booking_data['custom_id']));
+	           //  $car_data = $this->commonModel->readData("cars",array("id"=>$booking_data['car_id']));
 	           //  $this->sendMail($customer_data['email'],str_replace("{customer_name}", $customer_data['firstname']." ".$customer_data['lastname'], $custom_email_data['subject']),str_replace("{car name}",$car_data['cartitle'],$custom_email_data['content']));
 
 
 
-            // $owner_email_data = $this->common_model->readData("email_templates",array("template_name"=>"to owner when complete rental"));
-            // $owner_data = $this->common_model->readData("member",array("id"=>$booking_data['owner_id']));
+            // $owner_email_data = $this->commonModel->readData("email_templates",array("template_name"=>"to owner when complete rental"));
+            // $owner_data = $this->commonModel->readData("member",array("id"=>$booking_data['owner_id']));
             
             // $this->sendMail($owner_data['email'],str_replace("{customer_name}", $owner_data['firstname']." ".$owner_data['lastname'], $owner_email_data['subject']),$owner_email_data['content']);
  			$this->session->set_userdata("download_flg",1);
             $this->session->set_userdata("login_flg",1);
-            $res = $this->common_model->readData("member",array("id"=>$this->session->userdata("user_id")));
+            $res = $this->commonModel->readData("member",array("id"=>$this->session->get("user_id")));
             $this->session->set_userdata("email",$res['email']);
             $this->session->set_userdata("user_name",$res['user_name']);
             // http://localhost/logomaker/
-            if($this->session->userdata("lang") != "FR") 
+            if($this->session->get("lang") != "FR") 
                 redirect(site_url()."ViewLogos/EN");
             else 
                 redirect(site_url()."ViewLogos/FR");
@@ -197,16 +197,16 @@ class Stripe extends Controller {
 
 	public function payment_success()
 	{
-		$this->load->view('payment_success');
+		return view('payment_success');
 	}
 
 	public function payment_error()
 	{
-		$this->load->view('payment_error');
+		return view('payment_error');
 	}
 
 	public function help()
 	{
-		$this->load->view('help');
+		return view('help');
 	}
 }

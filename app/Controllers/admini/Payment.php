@@ -11,22 +11,22 @@ class Payment extends MY_Admin_Controller {
 
 	public function index()
 	{
-		$history_datas = $this->common_model->readDatas("transaction");
-		$this->load->view('admini/payment_history.php', array("history_datas"=>$history_datas));
+		$history_datas = $this->commonModel->readDatas("transaction");
+		return view('admini/payment_history.php', array("history_datas"=>$history_datas));
 	}
 
 	public function paymentSetting(){
-		$this->load->view("admini/payment_getway");
+		return view("admini/payment_getway");
 	}
 
 	public function updateGetway(){
 		$updateData = $this->input->post();
-		$this->common_model->updateData("paymentgetway",$updateData,array("id"=>1));
+		$this->commonModel->updateData("paymentgetway",$updateData,array("id"=>1));
 		redirect(site_url("admini/payment/paymentSetting"));
 	}
 
 	public function withdraw(){
-		$this->load->view("admini/withdraw");
+		return view("admini/withdraw");
 	}
 
 	public function get_withdraw(){
@@ -64,7 +64,7 @@ class Payment extends MY_Admin_Controller {
  			$update_data['status'] = "Complete";
  			$member = get_row("member",array("id"=>$withdraw['user_id']));
  			$balance = $member['balance'] - $withdraw['amount'];
- 			$this->common_model->updateData("member",array("balance"=>$balance),array("id"=>$member['id']));
+ 			$this->commonModel->updateData("member",array("balance"=>$balance),array("id"=>$member['id']));
 
             $template = get_row("email_template",array("id"=>6));
             $subject = $template['subject'];
@@ -104,8 +104,8 @@ class Payment extends MY_Admin_Controller {
             sendMail($user['email'],$subject,$body,$user['id']);
 
  		}
- 		$this->common_model->updateData("withdraw",$update_data,array("id"=>$id));
- 		$this->common_model->updateData("transaction",array("status"=>$update_data['status']),array("id"=>$withdraw['transaction_id']));
+ 		$this->commonModel->updateData("withdraw",$update_data,array("id"=>$id));
+ 		$this->commonModel->updateData("transaction",array("status"=>$update_data['status']),array("id"=>$withdraw['transaction_id']));
  		redirect(site_url("admini/payment/withdraw"));
  	}
 
@@ -152,16 +152,16 @@ class Payment extends MY_Admin_Controller {
 
         sendMail($user['email'],$subject,$body,$user['id']);
 
-        $this->common_model->updateData("transaction",array("status"=>"Refund","refund_date"=>date("Y-m-d H:i:s")),array("id"=>$id));
+        $this->commonModel->updateData("transaction",array("status"=>"Refund","refund_date"=>date("Y-m-d H:i:s")),array("id"=>$id));
         $balance = $user['balance'];
         $balance -= ($transaction['price']-$transaction['fee']);
 
-        $this->common_model->updateData("member",array("balance"=>$balance), array("id"=>$user['id']));
+        $this->commonModel->updateData("member",array("balance"=>$balance), array("id"=>$user['id']));
         redirect(site_url("admini/payment"));
     }
 
     public function request_refund(){
-        $this->load->view("admini/refund");
+        return view("admini/refund");
     }
 
  	public function get_transaction(){

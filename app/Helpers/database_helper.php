@@ -114,7 +114,7 @@ function get_row($table, $where)
 
     $db->table($table)->where($where);
 
-    return $db->table($table)->get();
+    return $db->table($table)->get()->getResultArray()[0];
 }
 
 function add_logo($msg_body)
