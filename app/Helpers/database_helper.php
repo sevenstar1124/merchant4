@@ -30,8 +30,8 @@ function sendMail_to_admin($email, $msg_subject, $msg_body, $user_id = "")
         'protocol'  => 'smtp',
         'smtp_host' => 'mail.virsympay.com',
         'smtp_port' => 587,
-        'smtp_user' => 'merchant@virsympay.com',
-        'smtp_pass' => '!U?sY*I]aTRW',
+        'smtp_user' => '',
+        'smtp_pass' => '',
         'mailtype'  => 'html',
         'charset'   => 'utf-8'
     );
@@ -81,10 +81,10 @@ function sendMail($email, $msg_subject, $msg_body, $user_id = "")
 
     $config = array(
         'protocol'  => 'smtp',
-        'smtp_host' => 'smtp.ionos.com',
+        'smtp_host' => '',
         'smtp_port' => 587,
-        'smtp_user' => 'merchant@virsympay.com',
-        'smtp_pass' => 'Bahaman32908!',
+        'smtp_user' => '',
+        'smtp_pass' => '',
         'mailtype'  => 'html',
         'charset'   => 'utf-8'
     );
