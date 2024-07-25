@@ -2,114 +2,117 @@
 
 namespace App\Controllers;
 
-class Login extends Controller
+use App\Models\CommonModel;
+
+class Login extends BaseController
 {
-    /**
-     * Index Page for this controller.
-     *
-     * Maps to the following URL
-     * 		http://example.com/index.php/welcome
-     *	- or -
-     * 		http://example.com/index.php/welcome/index
-     *	- or -
-     * Since this controller is set as the default controller in
-     * config/routes.php, it's displayed at http://example.com/
-     *
-     * So any other public methods not prefixed with an underscore will
-     * map to /index.php/welcome/<method_name>
-     *
-     * @see http://codeigniter.com/user_guide/general/urls.html
-     */
+    protected $session;
+    protected $commonModel;
+
     public function __construct()
-    {   
-       
-        // Call the Model constructor
-        parent::__construct();
-        $this->load->library('session');
-        $this->load->helper('form');
-        $this->load->helper('url');
+    {
+        $this->session = session();
+        helper(['form', 'url']);
+        $this->commonModel = new CommonModel();
     }
 
-    public function index(){   
+    public function index()
+    {
         return view("login");
     }
 
-    public function signup(){
+    public function signup()
+    {
         $data = $this->request->getPost();
         $data['date'] = date("Y-m-d H:i:s");
-        $res = get_rows("member",array("email"=>$data['email']));
-        if($res){
-            $this->session->set_userdata('warning', "Email is exits already!");
-            redirect(site_url());
-        }
-        $data['status'] = 2;
-        $data['password'] = md5($data['password']);
-        $res = $this->commonModel->createData("member",$data);
-        $this->session->set_userdata("member_id",$res['id']);
 
-        $template = get_row("email_template",array("id"=>11));
+        $res = $this->commonModel->get_row("member", ['email' => $data['email']]);
+        if ($res) {
+            $this->session->setFlashdata('warning', "Email already exists!");
+            return redirect()->to(site_url());
+        }
+
+        $data['status'] = 2;
+        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        $res = $this->commonModel->createData("member", $data);
+        $this->session->set('member_id', $res['id']);
+
+        $template = $this->commonModel->get_row("email_template", ['id' => 11]);
         $subject = $template['subject'];
         $body = nl2br($template['body']);
-        $merchant_name = $data['first_name']." ".$data['last_name'];
+        $merchant_name = $data['first_name'] . " " . $data['last_name'];
         $body = str_replace("{#merchant_name}", $merchant_name, $body);
-        sendMail($data['email'],$subject,$body,$res['id']);
 
-        redirect(site_url(''));
+        sendMail($data['email'], $subject, $body, $res['id']);
+        return redirect()->to(site_url());
     }
 
-    public function login(){
+    public function login()
+    {
         $data = $this->request->getPost();
-        $data['password'] = md5($data['password']);
-        $res = get_row("member",$data);
-        if($res){
-            if($res['status'] == 0){
-                $this->session->set_userdata('warning', "Your account was suspended!");
-                redirect(site_url());
+        $password = $data['password'];
+
+        $res = $this->commonModel->get_row("member", ['email' => $data['email']]);
+        if ($res && password_verify($password, $res['password'])) {
+            if ($res['status'] == 0) {
+                $this->session->setFlashdata('warning', "Your account was suspended!");
+                return redirect()->to(site_url());
             }
-            $this->session->set_userdata("member_id",$res['id']);
-            $this->session->set_userdata("approve_status",$res['approve_status']);
-            $this->session->set_userdata("member_status",$res['status']);
-            $working_status = "yes";
-            if($res['approve_status'] == 0 || $res['status']!=1) $working_status = "no";
-            $this->session->set_userdata("working_status",$working_status);
-            redirect(site_url(''));
+
+            $this->session->set('member_id', $res['id']);
+            $this->session->set('approve_status', $res['approve_status']);
+            $this->session->set('member_status', $res['status']);
+
+            $working_status = ($res['approve_status'] == 0 || $res['status'] != 1) ? "no" : "yes";
+            $this->session->set('working_status', $working_status);
+
+            return redirect()->to(site_url());
         } else {
-            $this->session->set_userdata('warning', "Invalid email or password!");
-            redirect(site_url());
+            $this->session->setFlashdata('warning', "Invalid email or password!");
+            return redirect()->to(site_url());
         }
     }
-    public function logout(){
-        $this->session->sess_destroy();
-        redirect(site_url());
+
+    public function logout()
+    {
+        $this->session->destroy();
+        return redirect()->to(site_url());
     }
 
-    public function reset_password(){
-        $email = $this->input->post("email");
-        $row = get_row("member",array("email"=>$email));
-        if(!$row){
-            $this->session->set_userdata("warning","Don't exits email");
+    public function reset_password()
+    {
+        $data = $this->request->getPost();
+        $email = $data['email'];
+
+        $row = $this->commonModel->get_row("member", ['email' => $email]);
+        if (!$row) {
+            $this->session->setFlashdata("warning", "Email does not exist.");
         } else {
-            $subject = "Reset Passowrd";
+            $subject = "Reset Password";
             $body = "";
-            $body .= "<form target='_blank' action='".base_url("home/update_password")."' method='post'>";
-            $body .= "<p>If you wnat reset password, Please click Confirm button</p>";
+            $body .= "<form target='_blank' action='" . base_url("home/update_password") . "' method='post'>";
+            $body .= "<p>If you want to reset your password, please click the Confirm button.</p>";
             $body .= "<input type='password' name='password' />";
-            $body .= "<input type='hidden' name='email' value='".$email."' />";
+            $body .= "<input type='hidden' name='email' value='" . $email . "' />";
             $body .= "<button type='submit' formtarget='_blank'>Reset</button>";
             $body .= "</form>";
-            sendMail($email,$subject,$body);
-            $this->session->set_userdata("success","Sent email for reset password. Please check your inbox.");
 
+            sendMail($email, $subject, $body);
+            $this->session->setFlashdata("success", "Sent email for resetting password. Please check your inbox.");
         }
-        redirect(site_url());
+
+        return redirect()->to(site_url());
     }
-    public function update_password(){
-        $password = $this->input->post("password");
-        $email = $this->input->post("email");
-        $this->load->medel("common_model");
-        $this->commonModel->updateData("member",array("password"=>md5($password)),array("email"=>$email));
-        $this->session->set_userdata("success","Successfully update password.");
-        redirect(site_url());
+
+    public function update_password()
+    {
+        $data = $this->request->getPost();
+        $password = $data['password'];
+        $email = $data['email'];
+
+        $this->commonModel->updateData("member", ['password' => password_hash($password, PASSWORD_DEFAULT)], ['email' => $email]);
+        $this->session->setFlashdata("success", "Successfully updated password.");
+
+        return redirect()->to(site_url());
     }
-   
 }

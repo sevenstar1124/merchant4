@@ -61,7 +61,7 @@ class Customer extends MY_Admin_Controller {
         if(!isset($data['second_owner'])) $data['second_owner'] = 0;
         if(!isset($data['owner2_us_city'])) $data['owner2_us_city'] = 0;
         if($data['phase_status'] == 6) $data['status'] = 1;
-        $member_data = get_row('member',array("member_id"=>$data['member_id']));
+        $member_data = get_row('member_data',array("member_id"=>$data['member_id']));
         if($member_data == array()){
             $res = $this->commonModel->createData("member_data",$data);
         } else {

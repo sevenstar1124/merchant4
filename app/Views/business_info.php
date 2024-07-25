@@ -1,6 +1,6 @@
 <?php
 echo view('templates/header');;
-$member_data = get_row('member', array("member_id" => session()->get("member_id")));
+$member_data = get_row('member_data', array("member_id" => session()->get("member_id")));
 // print_r(session()->get("member_id")); exit;
 ?>
 

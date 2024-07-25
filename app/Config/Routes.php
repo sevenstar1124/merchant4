@@ -19,7 +19,12 @@ $routes->get('/contact', 'Contact::index');
 
 $routes->get('/account/dashboard', 'Account::dashboard');
 $routes->get('/account/businessInfo', 'Account::businessInfo');
-$routes->get('/account/dashboard', 'Account::dashboard');
-$routes->get('/account/dashboard', 'Account::dashboard');
-$routes->get('/account/dashboard', 'Account::dashboard');
-$routes->get('/account/dashboard', 'Account::dashboard');
+$routes->get('/account/uploadCenter', 'Account::uploadCenter');
+$routes->get('/account/card_info', 'Account::card_info');
+$routes->get('/account/register_product', 'Account::register_product');
+$routes->get('/account/transaction_history', 'Account::transaction_history');
+$routes->get('/account/withdraw_money', 'Account::withdraw_money');
+$routes->get('/account/inbox', 'Account::inbox');
+
+
+$routes->get('/login/logout', 'Login::logout');
