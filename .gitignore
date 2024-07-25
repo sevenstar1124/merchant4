@@ -87,6 +87,7 @@ phpunit
 vendor/
 vendors/
 font-awesome/
+uploads/
 
 
 #-------------------------

@@ -87,7 +87,7 @@
         $.ajax({
             url: "<?php echo base_url("account/get_email_count"); ?>",
             dataType: "json",
-            type: "post",
+            type: "get",
             success: function(res) {
                 if (res.count * 1 != 0) {
                     $(".message-count-box").show();

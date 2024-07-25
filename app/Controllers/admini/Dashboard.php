@@ -19,10 +19,7 @@ class Dashboard extends MY_Admin_Controller
 
     public function index()
     {
-        $user = $this->commonModel->readData("user", array("id" => session()->get('admin_id')));
-        echo 'user: ';
-        print_r($user); exit;
-        return view("admini/dashboard", ['user' => $user]);
+        return view("admini/dashboard", ['user' => $this->user]);
     }
 
     public function get_chart_data()

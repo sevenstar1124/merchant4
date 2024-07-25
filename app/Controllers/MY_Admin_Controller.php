@@ -9,14 +9,16 @@ class MY_Admin_Controller extends Controller
 {
     protected $session;
     protected $commonModel;
+    protected $user;
 
     public function __construct()
     {
         // Load session and model services
         $this->session = \Config\Services::session();
         $this->commonModel = new CommonModel();
+        $this->user = $this->commonModel->readData("user", array("id" => session()->get('admin_id')));
 
-        if (empty($this->session->get("roll"))) {
+        if (empty($this->session->get("role"))) {
             if (service('uri')->getSegment(3) != 'fast_login') {
                 return redirect()->to(base_url("admini/login"));
             }

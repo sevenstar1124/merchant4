@@ -33,7 +33,23 @@ $routes->get('/login/logout', 'Login::logout');
 
 $routes->get('/admini', 'Admin::index');
 
-$routes->group('admini', ['namespace' => 'App\Controllers\Admini'], function($routes) {
+$routes->group('admini', ['namespace' => 'App\Controllers\Admini'], function ($routes) {
     $routes->get('dashboard', 'Dashboard::index');
     $routes->get('login', 'Login::index');
+    $routes->post('login/signup', 'Login::signup');
+    $routes->post('login/login', 'Login::login');
+
+    $routes->get('inbox/get_email_count', 'Inbox::get_email_count');
+    $routes->get('dashboard/get_chart_data', 'Dashboard::get_chart_data');
+    $routes->get('dashboard/get_pipe_data', 'Dashboard::get_pipe_data');
+
+    $routes->get('account/get_email_count', 'Account::get_email_count');
+
+    $routes->get('user/profile', 'User::profile');
+    $routes->get('user/getuserData', 'User::getuserData');
+
+    $routes->get('maker/getuserData', 'Maker::getuserData');
+
+    $routes->get('payment', 'Payment::index');
+
 });

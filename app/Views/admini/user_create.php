@@ -121,7 +121,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <label>
-                              <select class="select2_single form-control col-md-7 col-xs-12" name="roll" id="roll">
+                              <select class="select2_single form-control col-md-7 col-xs-12" name="role" id="role">
                                 <option value="0">Inactive</option>
                                 <option value="1">Super Admin</option>
                                 <option value="2">Admin</option>
