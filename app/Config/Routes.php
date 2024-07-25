@@ -28,3 +28,12 @@ $routes->get('/account/inbox', 'Account::inbox');
 
 
 $routes->get('/login/logout', 'Login::logout');
+
+
+
+$routes->get('/admini', 'Admin::index');
+
+$routes->group('admini', ['namespace' => 'App\Controllers\Admini'], function($routes) {
+    $routes->get('dashboard', 'Dashboard::index');
+    $routes->get('login', 'Login::index');
+});

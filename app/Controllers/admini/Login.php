@@ -1,62 +1,78 @@
 <?php
+
 namespace App\Controllers\admini;
 
-class Login extends Controller {
+use App\Controllers\BaseController;
+use App\Models\CommonModel;
 
-	function __construct()
-    {
-        parent::__construct();
-    
-    }
+class Login extends BaseController
+{
+
+	protected $commonModel;
+
+	public function __construct()
+	{
+		$this->commonModel = new CommonModel();
+	}
 
 	public function index()
 	{
-		 return view('admini/login.php');
+		return view('admini/login');
 	}
 
-	public function signup(){
-		$email = $this->input->post("email");
-		$password = $this->input->post("password");
-		$this->load->model("common_model");
-		$row = $this->commonModel->readData("user",array("email"=>$email));
+	public function signup()
+	{
+		$email = $this->request->getPost('email');
+		$password = $this->request->getPost('password') ?? '';
+
+		$row = $this->commonModel->readData('user', ['email' => $email]);
 		$error_msg = "";
-		if($row){
-			$error_msg = "Email is exits already. Try again.";
-			echo json_encode(array("status"=>"error","error_msg"=>$error_msg));
-			exit;
-		}
-		$res = $this->commonModel->createData("user",array("firstname"=> $this->input->post("first_name"),"lastname"=> $this->input->post("last_name"), "email"=>$email, "password"=>md5($password),"date"=>date("Y-m-d h:i:s")));
-		if($res){
-			echo json_encode(array("status"=>"ok","error_msg"=>"Successfully created! After allowed from super admin, Pleas use it."));
-			exit;
 
+		if ($row) {
+			$error_msg = "Email already exists. Try again.";
+			return $this->response->setJSON(['status' => 'error', 'error_msg' => $error_msg]);
+		}
+
+		$data = [
+			'firstname' => $this->request->getPost('first_name'),
+			'lastname'  => $this->request->getPost('last_name'),
+			'email'     => $email,
+			'password'  => md5($password),
+			'date'      => date("Y-m-d h:i:s"),
+		];
+
+		$res = $this->commonModel->createData('user', $data);
+
+		if ($res) {
+			return $this->response->setJSON(['status' => 'ok', 'error_msg' => 'Successfully created! After approval from super admin, please use it.']);
 		}
 	}
 
-	public function login(){
-
-		$email = $this->input->post("email");
-		$password = $this->input->post("password");
+	public function login()
+	{
+		$email = $this->request->getPost('email');
+		$password = $this->request->getPost('password') ?? '';
 		$password = md5($password);
 
-		$row = $this->commonModel->readData("user",array("email"=>$email,"password"=>$password));
-		
-		if(!$row) $row = array();
-		if(count($row)>0) {
-			// var_dump($row);
-			// echo $img; exit;
-			$this->session->set_userdata("email",$email);
-			$this->session->set_userdata("roll",$row['roll'] );
-			$this->session->set_userdata("admin_id",$row['id'] );
-			// $this->session->set_userdata("user_image",$row['imagename']);
-			redirect(site_url()."admini/dashboard");
-		} 
-		else {
-		 	return view('admini/login.php');
+		$row = $this->commonModel->readData('user', ['email' => $email, 'password' => $password]);
+
+		if (!$row) {
+			$row = [];
+		}
+
+		if (count($row) > 0) {
+			session()->set('email', $email);
+			session()->set('role', $row['role']);
+			session()->set('admin_id', $row['id']);
+			return redirect()->to(site_url('admini/dashboard'));
+		} else {
+			return view('admini/login');
 		}
 	}
-	public function logout(){
-		$this->session->sess_destroy();
-		redirect(site_url()."admini/dashboard");
+
+	public function logout()
+	{
+		session()->destroy();
+		return redirect()->to(site_url('admini/login'));
 	}
 }
