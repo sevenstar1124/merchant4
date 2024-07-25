@@ -86,6 +86,8 @@ phpunit
 #-------------------------
 vendor/
 vendors/
+font-awesome/
+
 
 #-------------------------
 # IDE / Development Files
