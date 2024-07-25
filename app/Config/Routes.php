@@ -45,11 +45,26 @@ $routes->group('admini', ['namespace' => 'App\Controllers\Admini'], function ($r
 
     $routes->get('account/get_email_count', 'Account::get_email_count');
 
+    $routes->get('user', 'User::index');
+    $routes->get('user/Add', 'User::Add');
     $routes->get('user/profile', 'User::profile');
     $routes->get('user/getuserData', 'User::getuserData');
 
     $routes->get('maker/getuserData', 'Maker::getuserData');
 
     $routes->get('payment', 'Payment::index');
+    $routes->get('payment/withdraw', 'Payment::withdraw');
+    $routes->get('payment/request_refund', 'Payment::request_refund');
+    
 
+    $routes->get('customer/active', 'Customer::active');
+    $routes->get('customer/inactive', 'Customer::inactive');
+    $routes->get('customer/pending', 'Customer::pending');
+    $routes->get('customer/suspended', 'Customer::suspended');
+    $routes->get('customer/businesInfo', 'Customer::businesInfo');
+    $routes->get('customer/Add', 'Customer::Add');
+
+    $routes->get('help/get_support', 'Help::get_support');
+    $routes->get('help/faq', 'Help::faq');
+    
 });

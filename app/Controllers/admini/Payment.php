@@ -32,7 +32,7 @@ class Payment extends MY_Admin_Controller
 
     public function withdraw()
     {
-        return view("admini/withdraw");
+        return view("admini/withdraw", ['user' => $this->user]);
     }
 
     public function get_withdraw()
@@ -61,7 +61,7 @@ class Payment extends MY_Admin_Controller
         $data['bank_info'] = $bank_info;
         echo json_encode(array("data" => $data));
     }
-    public function    withdraw_complete()
+    public function withdraw_complete()
     {
         $data = $this->request->getPost();
         $status = $data["complete_status"];
@@ -172,7 +172,7 @@ class Payment extends MY_Admin_Controller
 
     public function request_refund()
     {
-        return view("admini/refund");
+        return view("admini/refund", ['user' => $this->user]);
     }
 
     public function get_transaction()

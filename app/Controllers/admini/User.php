@@ -14,12 +14,12 @@ class User extends MY_Admin_Controller
 	public function index()
 	{
 		$users = $this->commonModel->readDatas("user");
-		return view('admini/user_list.php', array("users" => $users));
+		return view('admini/user_list.php', ['user' => $this->user, 'users' => $users]);
 	}
 
 	public function Add()
 	{
-		return view('admini/user_create.php');
+		return view('admini/user_create.php', ['user' => $this->user]);
 	}
 
 	public function createuser()
