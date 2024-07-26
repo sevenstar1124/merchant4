@@ -257,6 +257,7 @@ Slider Section Start
          </div>
          <div class="col-md-12">
            <form id="login_form" data-parsley-validate class="form-horizontal form-label-left" action="<?php echo site_url("login/login"); ?>" method="post" enctype="multipart/form-data">
+             <?= csrf_field(); ?>
              <div class="form-group">
                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Email <span class="required">*</span>
                </label>
@@ -288,6 +289,8 @@ Slider Section Start
            </form>
 
            <form id="reset_password" data-parsley-validate class="form-horizontal form-label-left" action="<?php echo site_url("login/reset_password"); ?>" method="post" enctype="multipart/form-data" style="display: none;">
+             <?= csrf_field(); ?>
+
              <div class="form-group">
                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Email <span class="required">*</span>
                </label>
@@ -308,6 +311,7 @@ Slider Section Start
            </form>
 
            <form name="signup_form" id="signup_form" data-parsley-validate class="form-horizontal form-label-left" action="<?php echo site_url("login/signup"); ?>" method="post" enctype="multipart/form-data" style="display: none;">
+             <?= csrf_field(); ?>
 
              <div class="form-group">
                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">First name<span class="required">*</span>

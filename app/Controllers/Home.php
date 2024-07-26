@@ -4,8 +4,14 @@ namespace App\Controllers;
 
 class Home extends MY_Controller
 {
-    public function index(): string
+    public function __construct()
     {
+        parent::__construct();
+    }
+
+    public function index()
+    {
+        
         return view('home');
     }
 

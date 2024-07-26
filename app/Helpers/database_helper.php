@@ -112,9 +112,12 @@ function get_row($table, $where)
 {
     $db = Database::connect();
 
-    $db->table($table)->where($where);
+    $res = $db->table($table)->where($where);
+    $res = $res->get()->getResultArray();
 
-    return $db->table($table)->get()->getResultArray()[0];
+    if ($res) 
+        return $res[0];
+    return null;
 }
 
 function add_logo($msg_body)

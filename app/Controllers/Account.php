@@ -12,6 +12,7 @@ class Account extends MY_Controller
     {
         $this->session = session();
         $this->commonModel = new CommonModel();
+        parent::__construct();
     }
 
     public function index()
@@ -26,6 +27,10 @@ class Account extends MY_Controller
 
     public function businessInfo()
     {
+        echo session()->get("member_id");
+        $member_data = get_row('member_data', array("member_id" => session()->get("member_id")));
+        print_r($member_data);
+        exit;
         return view("business_info");
     }
     public function dashboard()
@@ -89,7 +94,7 @@ class Account extends MY_Controller
         if (!isset($data['owner2_us_city'])) $data['owner2_us_city'] = 0;
         if ($data['phase_status'] == 6) $data['status'] = 1;
         $member_data = get_row('member_data', array("member_id" => $this->session->get("member_id")));
-        if ($member_data == array()) {
+        if ($member_data === null) {
             $res = $this->commonModel->createData("member_data", $data);
         } else {
             $res = $this->commonModel->updateData("member_data", $data, array("id" => $member_data['id']));

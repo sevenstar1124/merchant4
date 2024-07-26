@@ -12,7 +12,6 @@ class Login extends BaseController
     public function __construct()
     {
         $this->session = session();
-        helper(['form', 'url']);
         $this->commonModel = new CommonModel();
     }
 
@@ -26,7 +25,8 @@ class Login extends BaseController
         $data = $this->request->getPost();
         $data['date'] = date("Y-m-d H:i:s");
 
-        $res = $this->commonModel->get_row("member", ['email' => $data['email']]);
+        $res = get_row("member", ['email' => $data['email']]);
+
         if ($res) {
             $this->session->setFlashdata('warning', "Email already exists!");
             return redirect()->to(site_url());
@@ -37,13 +37,13 @@ class Login extends BaseController
         $res = $this->commonModel->createData("member", $data);
         $this->session->set('member_id', $res['id']);
 
-        $template = $this->commonModel->get_row("email_template", ['id' => 11]);
+        $template = get_row("email_template", ['id' => 11]);
         $subject = $template['subject'];
         $body = nl2br($template['body']);
         $merchant_name = $data['first_name'] . " " . $data['last_name'];
         $body = str_replace("{#merchant_name}", $merchant_name, $body);
 
-        sendMail($data['email'], $subject, $body, $res['id']);
+        // sendMail($data['email'], $subject, $body, $res['id']);
         return redirect()->to(site_url());
     }
 
