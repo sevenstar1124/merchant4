@@ -140,7 +140,7 @@ echo view("templates/header");
                 <li data-toggle="collapse" data-target="#sub_menu_<?php echo $tag['id']; ?>" class="collapsed">
                   <a href="#"> <?php echo $tag['title'] ?><span class="fa fa-chevron-down pull-right"></span></a>
                 </li>
-                <ul class="sub-menu collapse in <?php if ($ok == 0) echo "in"; ?>" id="sub_menu_<?php echo $tag['id']; ?>" style="">
+                <ul class="sub-menu collapse in <?php if ($ok == 0) echo "in"; ?>" id="sub_menu_<?php echo $tag['id']; ?>">
                   <?php
                   $tickets = get_rows("help_ticket", array("tag_id" => $tag['id']));
                   foreach ($tickets as $ticket) {

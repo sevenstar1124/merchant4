@@ -131,7 +131,7 @@ echo view("common/header.php");
                       ?>
                     </td>
                     <td style="text-align: center;">
-                      <img src="<?php echo base_url(); ?>assets/images/car/<?php echo $car_imgs[0]; ?>" style="" alt="Rolls-Royce Ghost 2017" width="100" height="100">
+                      <img src="<?php echo base_url(); ?>assets/images/car/<?php echo $car_imgs[0]; ?>" alt="Rolls-Royce Ghost 2017" width="100" height="100">
                       <br><?php echo $car['cartitle']; ?>
                     </td>
                     <td>

@@ -1,5 +1,5 @@
 <?php
-echo view('templates/header');;
+echo view('templates/header');
 ?>
 <section id="about">
   <div class="container">
@@ -133,5 +133,5 @@ Call To Action Section Start
 
 
 <?php
-echo view('templates/footer');;
+echo view('templates/footer');
 ?>
