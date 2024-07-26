@@ -20,13 +20,16 @@ class AuthClientFilter implements FilterInterface
             $row = get_row("member", array("id" => session()->get("member_id")));
             $member_data = get_row("member_data", array("member_id" => session()->get("member_id")));
 
+            // print_r($row);
             // print_r($member_data); exit;
-            if ($row['payment_process'] != "I will process under 5000 USD Montly") {
-                if ($member_data == array()) {
-                    redirect()->to(base_url("profileStep"));
-                } else {
-                    if ($member_data['status'] != 1) {
-                        redirect()->to(base_url("profileStep"));
+            if (service('uri')->getSegment(1) !== 'profileStep') {
+                if ($row['payment_process'] != "I will process under 5000 USD Montly") {
+                    if ($member_data == array()) {
+                        return redirect()->to(base_url("/profileStep"));
+                    } else {
+                        if ($member_data['status'] != 1) {
+                            return redirect()->to(base_url("/profileStep"));
+                        }
                     }
                 }
             }
