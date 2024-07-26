@@ -39,14 +39,14 @@ echo view('templates/header');
 							<div class="col-md-12">
 								<div class="form-group" style="margin-top: 0px;">
 									<label for="email">Bank Name</label>
-									<input type="text" class="form-control" name="name" value="<?php echo $bank['name']; ?>">
+									<input type="text" class="form-control" name="name" value="<?php echo $bank['name'] ?? ''; ?>">
 								</div>
 							</div>
 
 							<div class="col-md-6">
 								<div class="form-group" style="margin-top: 0px;">
 									<label for="email">Bank Address</label>
-									<input type="text" class="form-control" name="address" value="<?php echo $bank['address']; ?>">
+									<input type="text" class="form-control" name="address" value="<?php echo $bank['address'] ?? ''; ?>">
 								</div>
 							</div>
 
@@ -56,8 +56,9 @@ echo view('templates/header');
 									<select class="form-control" name="country">
 										<?php
 										$countries = get_rows("countries");
+										$b_country = $bank['country'] ?? '';
 										foreach ($countries as $key => $country) {
-											if ($bank['country'] == $country['long_name'])
+											if ($b_country == $country['long_name'])
 												echo '<option value="' . $country['long_name'] . '" selected>' . $country['long_name'] . '</option>';
 											else
 												echo '<option value="' . $country['long_name'] . '">' . $country['long_name'] . '</option>';
@@ -70,35 +71,35 @@ echo view('templates/header');
 							<div class="col-md-6">
 								<div class="form-group" style="margin-top: 0px;">
 									<label for="email">Bank Account Name</label>
-									<input type="text" class="form-control" name="account_name" value="<?php echo $bank['account_name']; ?>">
+									<input type="text" class="form-control" name="account_name" value="<?php echo $bank['account_name'] ?? ''; ?>">
 								</div>
 							</div>
 
 							<div class="col-md-6">
 								<div class="form-group" style="margin-top: 0px;">
 									<label for="email">Bank Account Number</label>
-									<input type="text" class="form-control" name="account_number" value="<?php echo $bank['account_number']; ?>">
+									<input type="text" class="form-control" name="account_number" value="<?php echo $bank['account_number'] ?? ''; ?>">
 								</div>
 							</div>
 
 							<div class="col-md-6">
 								<div class="form-group" style="margin-top: 0px;">
 									<label for="email">Bank Routing Number</label>
-									<input type="text" class="form-control" name="routing_number" value="<?php echo $bank['routing_number']; ?>">
+									<input type="text" class="form-control" name="routing_number" value="<?php echo $bank['routing_number'] ?? ''; ?>">
 								</div>
 							</div>
 
 							<div class="col-md-6">
 								<div class="form-group" style="margin-top: 0px;">
 									<label for="email">Bank Swift code</label>
-									<input type="text" class="form-control" name="swift_code" value="<?php echo $bank['swift_code']; ?>">
+									<input type="text" class="form-control" name="swift_code" value="<?php echo $bank['swift_code'] ?? ''; ?>">
 								</div>
 							</div>
 
 							<div class="col-md-12">
 								<div class="form-group" style="margin-top: 0px;">
 									<label for="email">Bank Transit Number</label>
-									<input type="text" class="form-control" name="transit" value="<?php echo $bank['transit']; ?>">
+									<input type="text" class="form-control" name="transit" value="<?php echo $bank['transit'] ?? ''; ?>">
 								</div>
 							</div>
 

@@ -41,13 +41,13 @@ class Login extends BaseController
         $data['date'] = date("Y-m-d H:i:s");
         $res = get_rows("member", array("email" => $data['email']));
         if ($res) {
-            $this->session->set_userdata('warning', "Email is exits already!");
+            $this->session->set('warning', "Email is exits already!");
             redirect(site_url());
         }
         $data['status'] = 2;
         $data['password'] = md5($data['password']);
         $res = $this->commonModel->createData("member", $data);
-        $this->session->set_userdata("member_id", $res['id']);
+        $this->session->set("member_id", $res['id']);
 
         $template = get_row("email_template", array("id" => 11));
         $subject = $template['subject'];
@@ -66,18 +66,18 @@ class Login extends BaseController
         $res = get_row("member", $data);
         if ($res) {
             if ($res['status'] == 0) {
-                $this->session->set_userdata('warning', "Your account was suspended!");
+                $this->session->set('warning', "Your account was suspended!");
                 redirect(site_url());
             }
-            $this->session->set_userdata("member_id", $res['id']);
-            $this->session->set_userdata("approve_status", $res['approve_status']);
-            $this->session->set_userdata("member_status", $res['status']);
+            $this->session->set("member_id", $res['id']);
+            $this->session->set("approve_status", $res['approve_status']);
+            $this->session->set("member_status", $res['status']);
             $working_status = "yes";
             if ($res['approve_status'] == 0 || $res['status'] != 1) $working_status = "no";
-            $this->session->set_userdata("working_status", $working_status);
+            $this->session->set("working_status", $working_status);
             redirect(site_url("home"));
         } else {
-            $this->session->set_userdata('warning', "Invalid email or password!");
+            $this->session->set('warning', "Invalid email or password!");
             redirect(site_url());
         }
     }
@@ -92,7 +92,7 @@ class Login extends BaseController
         $email = $this->input->post("email");
         $row = get_row("member", array("email" => $email));
         if (!$row) {
-            $this->session->set_userdata("warning", "Don't exits email");
+            $this->session->set("warning", "Don't exits email");
         } else {
             $subject = "Reset Passowrd";
             $body = "";
@@ -103,7 +103,7 @@ class Login extends BaseController
             $body .= "<button type='submit' formtarget='_blank'>Reset</button>";
             $body .= "</form>";
             sendMail($email, $subject, $body);
-            $this->session->set_userdata("success", "Sent email for reset password. Please check your inbox.");
+            $this->session->set("success", "Sent email for reset password. Please check your inbox.");
         }
         redirect(site_url());
     }
@@ -113,7 +113,7 @@ class Login extends BaseController
         $email = $this->input->post("email");
         $this->load->medel("common_model");
         $this->commonModel->updateData("member", array("password" => md5($password)), array("email" => $email));
-        $this->session->set_userdata("success", "Successfully update password.");
+        $this->session->set("success", "Successfully update password.");
         redirect(site_url());
     }
 }

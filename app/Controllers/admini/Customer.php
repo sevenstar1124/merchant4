@@ -72,7 +72,7 @@ class Customer extends MY_Admin_Controller
 			$res = $this->commonModel->updateData("member_data", $data, array("id" => $member_data['id']));
 		}
 		$member = $this->commonModel->readData('member', array('id' => $data['member_id']));
-		// $this->session->set_userdata()
+		// $this->session->set()
 		if ($member['status'] == 0) {
 			redirect(base_url("admini/customer/suspended"));
 		} else {

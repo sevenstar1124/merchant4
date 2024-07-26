@@ -96,7 +96,7 @@ class Stripe extends Controller {
 						$insertData['date'] = date("Y-m-d H:i:s");
 						$member = $this->commonModel->createData("member",$insertData);
 					}
-					$this->session->set_userdata("user_id",$member['id']);
+					$this->session->set("user_id",$member['id']);
 				}
 
 
@@ -129,11 +129,11 @@ class Stripe extends Controller {
             // $owner_data = $this->commonModel->readData("member",array("id"=>$booking_data['owner_id']));
             
             // $this->sendMail($owner_data['email'],str_replace("{customer_name}", $owner_data['firstname']." ".$owner_data['lastname'], $owner_email_data['subject']),$owner_email_data['content']);
- 			$this->session->set_userdata("download_flg",1);
-            $this->session->set_userdata("login_flg",1);
+ 			$this->session->set("download_flg",1);
+            $this->session->set("login_flg",1);
             $res = $this->commonModel->readData("member",array("id"=>$this->session->get("user_id")));
-            $this->session->set_userdata("email",$res['email']);
-            $this->session->set_userdata("user_name",$res['user_name']);
+            $this->session->set("email",$res['email']);
+            $this->session->set("user_name",$res['user_name']);
             // http://localhost/logomaker/
             if($this->session->get("lang") != "FR") 
                 redirect(site_url()."ViewLogos/EN");

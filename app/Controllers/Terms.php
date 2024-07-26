@@ -38,7 +38,7 @@ class AcceptTerms extends Controller
         $id = $this->session->get("member_id");
         $this->load->model("common_model");
         $this->commonModel->updateData("member",array("approve_status"=>1),array("id"=>$id));
-        $this->session->set_userdata("approve_status",1);
+        $this->session->set("approve_status",1);
         redirect(base_url(''));
     }
 }

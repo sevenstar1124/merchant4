@@ -87,19 +87,19 @@ class Checkout extends Controller
 
                 curl_close($curl);
                 if ($err) {
-                    $this->session->set_userdata("warning","Your Bank is not available, please try again");
+                    $this->session->set("warning","Your Bank is not available, please try again");
                     redirect(site_url("checkout/bankCheckout/?publish_key=".$data['publish_key']));
                 } else {
                     $response = json_decode($response, true);
 
                     if(!empty($response['error'])) {
-                        $this->session->set_userdata("warning",$response['message']);
+                        $this->session->set("warning",$response['message']);
                         redirect(site_url("checkout/bankCheckout/?publish_key=".$data['publish_key']));
                         return;
                     }
 
                     // if($response['basic_verification']['pass_bv'] == 0) {
-                    //     $this->session->set_userdata("warning","Bank Account verification failed");
+                    //     $this->session->set("warning","Bank Account verification failed");
                     //     redirect(site_url("checkout/bankCheckout/?publish_key=".$data['publish_key']));
                     //     return;
                     // }
@@ -261,7 +261,7 @@ class Checkout extends Controller
               
                 curl_close($curl);
                 if ($err) {
-                    $this->session->set_userdata("warning","Your credit card is not available, please try again");
+                    $this->session->set("warning","Your credit card is not available, please try again");
                     redirect(site_url("checkout/cardCheckout/?publish_key=".$data['publish_key']));
                 } else {
                     $response = json_decode($response, true);
@@ -272,11 +272,11 @@ class Checkout extends Controller
                             foreach ($response['errors'] as $key => $value) {
                                 $err.=$key." error : ".$value[0]."\n";
                             }
-                            $this->session->set_userdata("warning",$err);
+                            $this->session->set("warning",$err);
                             redirect(site_url("checkout/cardCheckout/?publish_key=".$data['publish_key']));
                         return;
                         } else {
-                            $this->session->set_userdata("warning","Your credit card is not available, please try again");
+                            $this->session->set("warning","Your credit card is not available, please try again");
                         redirect(site_url("checkout/cardCheckout/?publish_key=".$data['publish_key']));
                         return;    
                         }
@@ -370,7 +370,7 @@ class Checkout extends Controller
            
         } catch (Exception $ex) {
             if($checkout_type == "bank"){
-                $this->session->set_userdata("warning","Your Bank is not available, please try again");
+                $this->session->set("warning","Your Bank is not available, please try again");
                 redirect(site_url("checkout/bankCheckout/?publish_key=".$data['publish_key']));
             }
         }

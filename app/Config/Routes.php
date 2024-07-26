@@ -9,6 +9,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('login', 'Login::index');
 $routes->post('login/login', 'Login::login');
 $routes->post('login/signup', 'Login::signup');
+$routes->get('/AcceptTerms', 'AcceptTerms::index');
 
 $routes->group('', ['filter' => 'authClient'], function ($routes) {
     $routes->get('/profileStep', 'ProfileStep::index');
@@ -34,7 +35,8 @@ $routes->group('', ['filter' => 'authClient'], function ($routes) {
     $routes->get('/account/transaction_history', 'Account::transaction_history');
     $routes->get('/account/withdraw_money', 'Account::withdraw_money');
     $routes->get('/account/inbox', 'Account::inbox');
-
+    $routes->get('/account/api', 'Account::api');
+    
     $routes->get('/login/logout', 'Login::logout');
 });
 

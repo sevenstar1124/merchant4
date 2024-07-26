@@ -113,8 +113,8 @@ class Checkout_iPay extends Controller
                         exit;
                     }
                 }
-                $this->session->set_userdata("card_number",$card_num);
-                $this->session->set_userdata("pay_date", date("Y-m-d H:i:s"));
+                $this->session->set("card_number",$card_num);
+                $this->session->set("pay_date", date("Y-m-d H:i:s"));
 
                 $curl = curl_init();
                 curl_setopt($curl, CURLOPT_URL, $url);
@@ -212,12 +212,12 @@ class Checkout_iPay extends Controller
 
                     redirect($product['redirect_url']);
             } else {
-                $this->session->set_userdata("warning","Your card was declined, please try again");
+                $this->session->set("warning","Your card was declined, please try again");
                 redirect(site_url("checkout/?publish_key=".$data['publish_key']));
             }
            
         } catch (Exception $ex) {
-             $this->session->set_userdata("warning","Your card was declined, please try again");
+             $this->session->set("warning","Your card was declined, please try again");
             redirect(site_url("checkout/?publish_key=".$data['publish_key']));
 
         }

@@ -42,7 +42,7 @@ class Help extends My_Controller
                 $template = get_row("email_template", array("id" => 9));
                 $subject = $template['subject'];
                 $body = nl2br($template['body']);
-                $user = get_row("member", array("id" => $this->session->userdata("member_id")));
+                $user = get_row("member", array("id" => $this->session->get("member_id")));
                 $user_name = $user['first_name'] . " " . $user['last_name'];
                 $ticket_datais = "";
                 $ticket_datais .= "<b>Ticket ID </b> : #" . $id . "<br/>";
@@ -55,27 +55,27 @@ class Help extends My_Controller
                 $body = str_replace("{#merchant_name}", $user_name, $body);
                 $body = str_replace("{#ticket_details}", $ticket_datais, $body);
                 $body = str_replace("{#ticket_url}", $ticket_url, $body);
-                sendMail_to_admin($user['email'], $subject, $body, $this->session->userdata("member_id"));
+                sendMail_to_admin($user['email'], $subject, $body, $this->session->get("member_id"));
                 redirect(base_url("help/thanks"));
                 exit;
             }
-            $this->session->set_userdata("success", "Successfully updated question");
+            $this->session->set("success", "Successfully updated question");
         } else {
-            $data['user_id'] = $this->session->userdata("member_id");
+            $data['user_id'] = $this->session->get("member_id");
             $data['date'] = date("Y-m-d H:i:s");
             $this->commonModel->createData("questions", $data);
-            $this->session->set_userdata("success", "Successfully created new question");
+            $this->session->set("success", "Successfully created new question");
         }
         redirect(base_url("help/faq"));
     }
 
     public function before_question()
     {
-        // $this->commonModel->deleteData("questions",array("user_id"=>$this->session->userdata("member_id"), 'status'=>0));
-        $res = get_row("questions", array("user_id" => $this->session->userdata("member_id"), 'status' => 0));
+        // $this->commonModel->deleteData("questions",array("user_id"=>$this->session->get("member_id"), 'status'=>0));
+        $res = get_row("questions", array("user_id" => $this->session->get("member_id"), 'status' => 0));
         if ($res) {
         } else {
-            $data = array("user_id" => $this->session->userdata("member_id"));
+            $data = array("user_id" => $this->session->get("member_id"));
             $data['date'] = date("Y-m-d H:i:s");
             $res = $this->commonModel->createData("questions", $data);
         }
@@ -93,7 +93,7 @@ class Help extends My_Controller
     {
         $id = $this->request->getPost('id');
         $this->commonModel->deleteData("questions", array("id" => $id));
-        $this->session->set_userdata("success", "Successfully deleted");
+        $this->session->set("success", "Successfully deleted");
         echo json_encode(array("res" => "ok"));
         exit;
     }

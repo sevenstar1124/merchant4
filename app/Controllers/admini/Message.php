@@ -33,7 +33,7 @@ class Message extends MY_Admin_Controller
     {
         if ($id != "") {
             $this->commonModel->deleteData("message", array("id" => $id));
-            // $this->session->set_userdata("success","Successfully deleted message.");
+            // $this->session->set("success","Successfully deleted message.");
         }
         redirect(base_url("admini/inbox"));
     }
@@ -54,7 +54,7 @@ class Message extends MY_Admin_Controller
     {
         if ($id != "") {
             $this->commonModel->deleteData("message", array("id" => $id));
-            // $this->session->set_userdata("success","Successfully deleted message.");
+            // $this->session->set("success","Successfully deleted message.");
         }
         redirect(base_url("admini/message/sent"));
     }

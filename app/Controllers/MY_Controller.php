@@ -42,7 +42,7 @@ class MY_Controller extends Controller
             ];
 
             if (session()->get('approve_status') != 3 && service('uri')->getSegment(1) !== 'home') {
-                if (!in_array(service('uri')->getSegment(2), $restrictedSegments)) {
+                if (count(service('uri')->getSegments()) < 2 || !in_array(service('uri')->getSegment(2), $restrictedSegments)) {
                     return redirect()->to(base_url('home'));
                 }
             }

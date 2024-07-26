@@ -103,7 +103,7 @@ class Account extends MY_Controller
     {
         $data = $this->request->getPost();
         $this->commonModel->updateData("member", $data, array("id" => $this->session->get("member_id")));
-        $this->session->set_userdata("success", "Successfully Updated!");
+        $this->session->set("success", "Successfully Updated!");
         redirect(site_url("account/dashboard"));
     }
 
@@ -111,18 +111,18 @@ class Account extends MY_Controller
     {
         $data = $this->request->getPost();
         if ($data['new_password'] != $data['repeat_new_password']) {
-            $this->session->set_userdata('warning', "Don't same new password and new repeat password! Please try again.");
+            $this->session->set('warning', "Don't same new password and new repeat password! Please try again.");
             redirect(site_url("account/dashboard"));
             return;
         }
         $res = get_row("member", array("id" => $this->session->get("member_id"), "password" => md5($data['old_password'])));
         if (!$res) {
-            $this->session->set_userdata('warning', "Incorrect old password! Please try again.");
+            $this->session->set('warning', "Incorrect old password! Please try again.");
             redirect(site_url("account/dashboard"));
             return;
         }
         $this->commonModel->updateData("member", array("password" => md5($data['new_password'])), array("id" => $this->session->get("member_id")));
-        $this->session->set_userdata("success", "Successfully Updated!");
+        $this->session->set("success", "Successfully Updated!");
         redirect(site_url("account/dashboard"));
     }
 
@@ -138,7 +138,7 @@ class Account extends MY_Controller
         unset($data['id']);
         if ($id != "") {
             $this->commonModel->updateData("product", $data, array("id" => $id));
-            $this->session->set_userdata("success", "Successfully Updated!");
+            $this->session->set("success", "Successfully Updated!");
         } else {
             $con = true;
             $data['user_id'] = $this->session->get("member_id");
@@ -161,7 +161,7 @@ class Account extends MY_Controller
             }
             $data['publish_key'] = $publish_key;
             $this->commonModel->createData("product", $data);
-            $this->session->set_userdata("success", "Successfully registered.");
+            $this->session->set("success", "Successfully registered.");
         }
         redirect(site_url("account/register_product"));
     }
@@ -178,7 +178,7 @@ class Account extends MY_Controller
         $data = $this->request->getPost();
         $id = $data['id'];
         $this->commonModel->deleteData("product", array("id" => $id));
-        $this->session->set_userdata("success", "Successfully removed");
+        $this->session->set("success", "Successfully removed");
         redirect(site_url("account/register_product"));
     }
 
@@ -202,7 +202,7 @@ class Account extends MY_Controller
             $data['user_id'] = $this->session->get("member_id");
             $this->commonModel->createData("bank", $data);
         }
-        $this->session->set_userdata("success", "Successfully updated your bank account");
+        $this->session->set("success", "Successfully updated your bank account");
         redirect(site_url("account/withdraw_money"));
     }
 
@@ -212,12 +212,12 @@ class Account extends MY_Controller
         $amount = $data['amount'];
         $member = get_row("member", array("id" => $this->session->get("member_id")));
         if ($amount * 1 > $member['balance'] * 1) {
-            $this->session->set_userdata("warning", "You can't request withdraw more than $" . $member['balance'] . " Please try again with small amount.");
+            $this->session->set("warning", "You can't request withdraw more than $" . $member['balance'] . " Please try again with small amount.");
             redirect(site_url("account/withdraw_money"));
         }
         $withdraw = get_row("withdraw", array("user_id" => $this->session->get("member_id"), "status" => "Pending"));
         if ($withdraw) {
-            $this->session->set_userdata("warning", "You can't request withdraw before complete preview request. Please try again later.");
+            $this->session->set("warning", "You can't request withdraw before complete preview request. Please try again later.");
             redirect(site_url("account/withdraw_money"));
         }
 
@@ -241,7 +241,7 @@ class Account extends MY_Controller
         $data['transaction_id'] = $res['id'];
 
         $res = $this->commonModel->createData("withdraw", $data);
-        $this->session->set_userdata("success", "Successfully requested withdraw money");
+        $this->session->set("success", "Successfully requested withdraw money");
         redirect(site_url("account/withdraw_money"));
     }
 
@@ -348,7 +348,7 @@ class Account extends MY_Controller
     {
         $data = $this->request->getPost();
         $this->commonModel->updateData("member", $data, array("id" => $this->session->get("member_id")));
-        $this->session->set_userdata("success", "Successfully saved card info");
+        $this->session->set("success", "Successfully saved card info");
         redirect(site_url("account/card_info"));
     }
 
@@ -367,7 +367,7 @@ class Account extends MY_Controller
     {
         if ($id != "") {
             $this->commonModel->deleteData("message", array("id" => $id));
-            $this->session->set_userdata("success", "Successfully deleted message.");
+            $this->session->set("success", "Successfully deleted message.");
         }
         redirect(base_url("account/inbox"));
     }
@@ -376,7 +376,7 @@ class Account extends MY_Controller
         $data = $this->request->getPost();
         $id = $data['id'];
         $this->commonModel->updateData("transaction", array("status" => "request_refund"), array("id" => $id));
-        $this->session->set_userdata("success", "Successfully requested refund");
+        $this->session->set("success", "Successfully requested refund");
         redirect(base_url("account/transaction_history"));
     }
 
@@ -388,7 +388,7 @@ class Account extends MY_Controller
 
     public function api()
     {
-        $api = get_rows("api_keys", array('member_id' => $this->session->userdata("member_id")));
+        $api = get_rows("api_keys", array('member_id' => $this->session->get("member_id")));
         $api_key_live = '';
         $api_key_sand = '';
         $sacret_key_live = '';
@@ -418,13 +418,13 @@ class Account extends MY_Controller
             'api_key' => $api_key_live,
             'sacret_key' => $sacret_key_live,
             'type' => true,
-            'member_id' => $this->session->userdata("member_id"),
+            'member_id' => $this->session->get("member_id"),
         );
         $data_sand = array(
             'api_key' => $api_key_sand,
             'sacret_key' => $sacret_key_sand,
             'type' => false,
-            'member_id' => $this->session->userdata("member_id"),
+            'member_id' => $this->session->get("member_id"),
         );
         $data = array(
             'api_key_live' => $api_key_live,
@@ -440,7 +440,7 @@ class Account extends MY_Controller
 
     public function invoices()
     {
-        $invoices = get_rows('invoice', array('member_id' => $this->session->userdata('member_id')), 'created_at desc');
+        $invoices = get_rows('invoice', array('member_id' => $this->session->get('member_id')), 'created_at desc');
         $i = array();
         foreach ($invoices as $invoice) {
             $total_price = 0;
@@ -461,7 +461,7 @@ class Account extends MY_Controller
     {
         $save_data = $this->input->post();
         $save_data['products'] = $save_data['products'];
-        $save_data['member_id'] = $this->session->userdata('member_id');
+        $save_data['member_id'] = $this->session->get('member_id');
 
         $invoice = create_row('invoice', $save_data);
 
