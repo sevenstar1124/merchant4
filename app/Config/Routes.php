@@ -36,7 +36,8 @@ $routes->group('', ['filter' => 'authClient'], function ($routes) {
     $routes->get('/account/withdraw_money', 'Account::withdraw_money');
     $routes->get('/account/inbox', 'Account::inbox');
     $routes->get('/account/api', 'Account::api');
-    
+    $routes->get('/account/invoices', 'Account::invoices');
+
     $routes->get('/login/logout', 'Login::logout');
 });
 
