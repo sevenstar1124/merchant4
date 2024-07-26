@@ -115,7 +115,7 @@ function get_row($table, $where)
     $res = $db->table($table)->where($where);
     $res = $res->get()->getResultArray();
 
-    if ($res) 
+    if ($res)
         return $res[0];
     return null;
 }
@@ -138,19 +138,20 @@ function get_rows($table, $where = array(), $order_by = "", $like = array())
 {
     $db = Database::connect();
 
+    $res = $db->table($table);
     if (!empty($where)) {
-        $db->table($table)->where($where);
+        $res = $res->where($where);
     }
 
     if (!empty($like)) {
-        $db->table($table)->like($like);
+        $res = $res->like($like);
     }
 
     if (!empty($order_by)) {
-        $db->table($table)->orderBy($order_by);
+        $res = $res->orderBy($order_by);
     }
 
-    return $db->table($table)->get()->getResultArray();
+    return $res->get()->getResultArray();
 }
 
 function get_rows_count($table, $where = array(), $order_by = "", $like = array())
