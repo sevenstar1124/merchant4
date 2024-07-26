@@ -388,4 +388,169 @@ class Account extends MY_Controller
         $email_count = get_rows_count("message", array("receiver" => $this->session->get("member_id"), "status" => 1));
         echo json_encode(array("count" => $email_count));
     }
+
+    public function api()
+    {
+        $api = get_rows("api_keys", array('member_id' => $this->session->userdata("member_id")));
+        $api_key_live = '';
+        $api_key_sand = '';
+        $sacret_key_live = '';
+        $sacret_key_sand = '';
+
+        foreach ($api as $value) {
+            if ($value['type']) {
+                $api_key_live = $value['api_key'];
+                $sacret_key_live = $value['sacret_key'];
+            } else {
+                $api_key_sand = $value['api_key'];
+                $sacret_key_sand = $value['sacret_key'];
+            }
+        }
+        $data = array('api_key_live' => $api_key_live, 'api_key_sand' => $api_key_sand, 'sacret_key_live' => $sacret_key_live, 'sacret_key_sand' => $sacret_key_sand);
+        return view('api-manage', $data);
+    }
+
+    public function generateAPI()
+    {
+        $this->load->helper('string');
+        $api_key_live = 'virsympay_' . random_string('alnum', 30);
+        $api_key_sand = 'virsympay_' . random_string('alnum', 30);
+        $sacret_key_live = 'virsympay_' . random_string('alnum', 30);
+        $sacret_key_sand = 'virsympay_' . random_string('alnum', 30);
+        $data_live = array(
+            'api_key' => $api_key_live,
+            'sacret_key' => $sacret_key_live,
+            'type' => true,
+            'member_id' => $this->session->userdata("member_id"),
+        );
+        $data_sand = array(
+            'api_key' => $api_key_sand,
+            'sacret_key' => $sacret_key_sand,
+            'type' => false,
+            'member_id' => $this->session->userdata("member_id"),
+        );
+        $data = array(
+            'api_key_live' => $api_key_live,
+            'api_key_sand' => $api_key_sand,
+            'sacret_key_live' => $sacret_key_live,
+            'sacret_key_sand' => $sacret_key_sand,
+        );
+        create_row('api_keys', $data_live);
+        create_row('api_keys', $data_sand);
+        echo json_encode($data);
+        exit;
+    }
+
+    public function invoices()
+    {
+        $invoices = get_rows('invoice', array('member_id' => $this->session->userdata('member_id')), 'created_at desc');
+        $i = array();
+        foreach ($invoices as $invoice) {
+            $total_price = 0;
+            $products = json_decode($invoice['products'], true);
+            foreach ($products as $product) {
+                $p = get_row('product', array('publish_key' => $product['publish_key']));
+                if (isset($p['price'])) {
+                    $total_price += $p['price'] * $product['qty'];
+                }
+            }
+            $invoice['price'] = $total_price;
+            array_push($i, $invoice);
+        }
+        return return view('invoices', array('invoices' => $i));
+    }
+
+    public function invoice_create()
+    {
+        $save_data = $this->input->post();
+        $save_data['products'] = $save_data['products'];
+        $save_data['member_id'] = $this->session->userdata('member_id');
+
+        $invoice = create_row('invoice', $save_data);
+
+        $data = array();
+        $data['invoice_id'] = str_pad($invoice['id'], 4, '0', STR_PAD_LEFT);
+        $data['email'] = $invoice['email'];
+        $data['date'] = date("m/d/Y", strtotime($invoice['created_at']));
+        $products = json_decode($invoice['products'], true);
+        $total_price = 0;
+        $product_list = array();
+
+        $data['pay_link'] = site_url('/checkout') . "?params=" . '{"products":' . $invoice['products'] . ',"invoice":' . $invoice['id'] . '}';
+
+        foreach ($products as $product) {
+            $p = get_row('product', array('publish_key' => $product['publish_key']));
+            if ($p && isset($p['price'])) {
+                $p['qty'] = $product['qty'];
+                array_push($product_list, $p);
+                $total_price += $p['price'] * $product['qty'];
+            }
+        }
+        $payment = get_row("paymentgetway", array("id" => 1));
+        $data['products'] = $product_list;
+        $data['fee'] = round($payment['checkout_fee'] / 100 *  $total_price, 1);
+        $data['total_price'] = $total_price;
+
+
+        $html = return view('invoice', $data, true);
+
+        sendMail($data['email'], "Merchant Virsympay Invoice", $html, "", false);
+
+        // redirect("account/invoices");
+        echo "<script>window.location.assign('" . site_url("/account/invoices") . "')</script>";
+    }
+
+    public function invoice()
+    {
+
+        $invoice_id = $this->uri->segment(3);
+        $invoice = get_row('invoice', array('id' => $invoice_id));
+        $data = array();
+        $data['invoice_id'] = str_pad($invoice_id, 4, '0', STR_PAD_LEFT);
+        $data['email'] = $invoice['email'];
+        $data['date'] = date("m/d/Y", strtotime($invoice['created_at']));
+        $data['pay_link'] = site_url('/checkout') . "?params=" . '{"products":' . $invoice['products'] . ',"invoice":' . $invoice_id . '}';
+        $products = json_decode($invoice['products'], true);
+        $total_price = 0;
+        $product_list = array();
+
+        foreach ($products as $product) {
+            $p = get_row('product', array('publish_key' => $product['publish_key']));
+            if ($p && isset($p['price'])) {
+                $p['qty'] = $product['qty'];
+                array_push($product_list, $p);
+                $total_price += $p['price'] * $product['qty'];
+            }
+        }
+        $payment = get_row("paymentgetway", array("id" => 1));
+
+        $data['products'] = $product_list;
+        $data['fee'] = round($payment['checkout_fee'] / 100 *  $total_price, 1);
+        $data['total_price'] = $total_price;
+
+        return view('invoice', $data);
+    }
+
+    public function delete_invoice()
+    {
+        $id = $this->input->input_stream('id', true);
+        delete_row('invoice', array('id' => $id));
+        echo json_encode(array('res' => 'deleted'));
+    }
+
+    public function invoice_reminder()
+    {
+        $id = $this->input->post('id');
+        $invoice = get_row('invoice', array('id' => $id));
+
+        $html = `
+            <p>You didn't process as for invoice ` . str_pad($invoice['id'], 4, '0', STR_PAD_LEFT) . `.</p>
+        `;
+
+        sendMail($invoice['email'], "Merchant Virsympay Invoice", $html);
+
+        update_row('invoice', array('id' => $id), array('reminder_date' => date('Y-m-d h:i:s')));
+
+        echo "<script>window.location.assign('" . site_url("/account/invoices") . "')</script>";
+    }
 }
