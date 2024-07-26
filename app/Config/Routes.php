@@ -27,6 +27,7 @@ $routes->get('/account/withdraw_money', 'Account::withdraw_money');
 $routes->get('/account/inbox', 'Account::inbox');
 
 
+$routes->get('login', 'Login::index');
 $routes->get('/login/logout', 'Login::logout');
 
 
