@@ -93,7 +93,6 @@ echo view('common/header.php');
 echo view('common/footer.php');
 ?>
 
-
 <div class="modal fade in" id="question_modal" aria-hidden="false" style="display: none;">
   <div class="modal-dialog" style="width: 700px;">
     <div class="modal-content">
@@ -217,7 +216,6 @@ echo view('common/footer.php');
             document.location.reload();
           }
         })
-
       }
     })
 
@@ -229,7 +227,5 @@ echo view('common/footer.php');
       id = $(this).closest("tr").data("id");
       document.location.replace(ajax_url + "admini/help/answer/" + id);
     })
-
-
   })
 </script>

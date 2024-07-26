@@ -108,7 +108,6 @@ echo view('common/footer.php');
 ?>
 
 
-
 <div class="modal fade in" id="tag_modal" aria-hidden="false" style="display: none;">
   <div class="modal-dialog" style="width: 700px;">
     <div class="modal-content">
@@ -342,8 +341,6 @@ echo view('common/footer.php');
       $(this).addClass("li-active");
       $("#tag_id").val($(this).data("id"));
       viewTicketTable();
-
     })
-
   })
 </script>
