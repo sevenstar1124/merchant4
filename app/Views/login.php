@@ -195,7 +195,7 @@
  <body>
 
    <?php
-    if (session()->get("warning") != "") {
+    if (session()->get("warning") != null && session()->get("warning") != '') {
     ?>
      <div id="alert_error_wrap" class="float-alert animated fadeInRight col-xs-11 col-sm-4 alert alert-danger" style="z-index: 10000; float: right; margin-top: 10px;">
        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -343,11 +343,13 @@ Slider Section Start
                <div style="font-size:18px; padding:5px;">New Merchant SignUp</div>
                <div style="font-size:14px; padding:5px;">Please select an Option</div>
                <div>
-                 <div style=" float:left; width:45%; background:#007AFF; color:#FFFFFF; padding:10px; margin-right:5%; font-size:13px !important">
-                   <input type="radio" id="payment_process" name="payment_process" onClick="$('#div_process_payment_5000').show('1000')" value="I will process under 5000 USD Montly"> I will process under 5000 USD Monthly
+                 <div style=" float:left; width:45%; background:#007AFF; color:#FFFFFF; padding:10px; margin-right:5%; font-size:13px !important;">
+                   <input type="radio" id="payment_process1" name="payment_process" onClick="$('#div_process_payment_5000').show('1000')" value="I will process under 5000 USD Montly">
+                   <label for="payment_process1" style="cursor:pointer;">I will process under 5000 USD Monthly</label>
                  </div>
-                 <div style=" float:left; width:45%; background:#007AFF; color:#FFFFFF; padding:10px; font-size:13px !important">
-                   <input type="radio" id="payment_process" name="payment_process" onClick="$('#div_process_payment_5000').show('1000')" value="I will process over 5000 USD Montly"> I will process over 5000 USD Monthly
+                 <div style=" float:left; width:45%; background:#007AFF; color:#FFFFFF; padding:10px; font-size:13px !important;">
+                   <input type="radio" id="payment_process2" name="payment_process" onClick="$('#div_process_payment_5000').show('1000')" value="I will process over 5000 USD Montly">
+                   <label for="payment_process2" style="cursor:pointer;">I will process over 5000 USD Monthly</label>
                  </div>
                  <div style="clear:both"></div>
                </div>

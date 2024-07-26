@@ -23,12 +23,18 @@ class Login extends BaseController
     public function signup()
     {
         $data = $this->request->getPost();
+
+        if ($this->session->get('randomCaptcha') != $data["captchaWord"]) {
+            $this->session->set('warning', "Please prove you are human!");
+            return redirect()->to(site_url());
+        }
+
         $data['date'] = date("Y-m-d H:i:s");
 
-        $res = get_row("member", ['email' => $data['email']]);
+        $res = get_rows("member", ['email' => $data['email']]);
 
         if ($res) {
-            $this->session->setFlashdata('warning', "Email already exists!");
+            $this->session->set('warning', "Email already exists!");
             return redirect()->to(site_url());
         }
 
@@ -52,10 +58,10 @@ class Login extends BaseController
         $data = $this->request->getPost();
         $password = $data['password'];
 
-        $res = $this->commonModel->get_row("member", ['email' => $data['email']]);
+        $res = get_row("member", ['email' => $data['email']]);
         if ($res && password_verify($password, $res['password'])) {
             if ($res['status'] == 0) {
-                $this->session->setFlashdata('warning', "Your account was suspended!");
+                $this->session->set('warning', "Your account was suspended!");
                 return redirect()->to(site_url());
             }
 
@@ -65,10 +71,11 @@ class Login extends BaseController
 
             $working_status = ($res['approve_status'] == 0 || $res['status'] != 1) ? "no" : "yes";
             $this->session->set('working_status', $working_status);
+            $this->session->set('warning', '');
 
             return redirect()->to(site_url());
         } else {
-            $this->session->setFlashdata('warning', "Invalid email or password!");
+            $this->session->set('warning', "Invalid email or password!");
             return redirect()->to(site_url());
         }
     }
@@ -84,9 +91,9 @@ class Login extends BaseController
         $data = $this->request->getPost();
         $email = $data['email'];
 
-        $row = $this->commonModel->get_row("member", ['email' => $email]);
+        $row = get_row("member", ['email' => $email]);
         if (!$row) {
-            $this->session->setFlashdata("warning", "Email does not exist.");
+            $this->session->set("warning", "Email does not exist.");
         } else {
             $subject = "Reset Password";
             $body = "";
@@ -98,7 +105,7 @@ class Login extends BaseController
             $body .= "</form>";
 
             sendMail($email, $subject, $body);
-            $this->session->setFlashdata("success", "Sent email for resetting password. Please check your inbox.");
+            $this->session->set("success", "Sent email for resetting password. Please check your inbox.");
         }
 
         return redirect()->to(site_url());
@@ -111,7 +118,7 @@ class Login extends BaseController
         $email = $data['email'];
 
         $this->commonModel->updateData("member", ['password' => password_hash($password, PASSWORD_DEFAULT)], ['email' => $email]);
-        $this->session->setFlashdata("success", "Successfully updated password.");
+        $this->session->set("success", "Successfully updated password.");
 
         return redirect()->to(site_url());
     }
