@@ -6,7 +6,7 @@ echo view('templates/header');
     <div class="row">
       <div class="col-md-3" style="padding: 0px 10px 0px 0px;">
         <?php
-        $this->load->view("components/siderbar", array('active' => 'card'));
+        echo view("components/siderbar", array('active' => 'card'));
         ?>
       </div>
       <div class="col-md-9" style="padding: 0px 0px 0px 10px;">

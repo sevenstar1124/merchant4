@@ -14,7 +14,7 @@ $member_data = get_row('member_data', array("member_id" => session()->get("membe
     <div class="row">
       <div class="col-md-3" style="padding: 0px 10px 0px 0px;">
         <?php
-        $this->load->view("components/siderbar", array('active' => 'bussiness'));
+        echo view("components/siderbar", array('active' => 'bussiness'));
         ?>
       </div>
       <div class="col-md-9" style="padding: 0px 0px 0px 10px;">
@@ -24,7 +24,7 @@ $member_data = get_row('member_data', array("member_id" => session()->get("membe
           ?>
 
           <form action="<?php echo site_url("account/saveStep"); ?>" method="post" name="step_form" id="step_form">
-            <input type="hidden" name="phase_status" id="phase_status" value="<?php echo $member_data['phase_status'] == "" ? 1 : $member_data['phase_status']; ?>">
+            <input type="hidden" name="phase_status" id="phase_status" value="<?php echo $member_data === null || $member_data['phase_status'] == "" ? 1 : $member_data['phase_status']; ?>">
             <div class="row">
               <div class="col-md-12">
                 <div class="step-box" data-stage="1">
