@@ -28,118 +28,6 @@
 
 
   <style type="text/css">
-
-
-  </style>
-</head>
-
-<body>
-
-  <?php
-  $publish_key = $_REQUEST['publish_key'];
-  $product = get_row("product", array("publish_key" => $publish_key));
-  $member = get_row("member", array("id" => $product['user_id']));
-  if ($member['approve_status'] != 2 || $member['status'] == 0) {
-  ?>
-    <div style="position: fixed; width: 100%; height: 100%; background: white; opacity: 0.5; z-index: 10000; ">
-      <p style="width: 1024px;padding: 30px;font-size: 30px;margin: 200px auto;background: black;color: white;text-align: center;">
-        Merchant's account is pending to live mode. Please try later!
-      </p>
-    </div>
-  <?php
-  }
-  ?>
-
-  <?php
-  if (session()->get("warning") != "") {
-  ?>
-    <div id="alert_error_wrap" class="float-alert animated fadeInRight col-xs-11 col-sm-4 alert alert-danger" style="z-index: 10000;float: right;margin-top: 10px;position: fixed;right: 0px;top: 0px;">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <span class="fa fa-bell-o" data-notify="icon"></span><span class="alert-title"><?php echo session()->get("warning"); ?></span>
-    </div>
-
-  <?php
-    session()->remove("warning");
-  }
-  ?>
-
-  <?php
-  if (session()->get("success") != "") {
-  ?>
-    <div id="alert_error_wrap" class="float-alert animated fadeInRight col-xs-11 col-sm-4 alert alert-success" style="z-index: 10000;float: right;margin-top: 10px;position: fixed;right: 0px;top: 0px;">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <span class="fa fa-bell-o" data-notify="icon"></span><span class="alert-title"><?php echo session()->get("success"); ?></span>
-    </div>
-
-  <?php
-    session()->remove("success");
-  }
-  ?>
-
-
-  <!--
-==================================================
-Header Section Start
-================================================== -->
-  <header id="top-bar" class="navbar-fixed-top animated-header">
-    <div class="container">
-      <div class="navbar-header  mobile-header" style="float: left; margin-top: 10px;">
-        <div class="navbar-brand mobile-header">
-          <img class="mobile-img" src="<?php echo base_url('assets/client_assets/images/logo.png'); ?>" alt="" style="height: 50px;">
-        </div>
-
-      </div>
-      <div class="mobile-header header-title">
-        Please Select your mode of checkout
-      </div>
-    </div>
-  </header>
-
-  <section id="about">
-    <div class="container">
-      <div class="checkout-item-wrap">
-        <div class="checkout-label">how would you like to proceed?</div>
-        <a class="checkout-item" href="">
-          <div class="checkout-item-logo">
-            <img src="<?php echo base_url('assets/client_assets/images/logo-wallet.png'); ?>">
-          </div>
-          <div class="checkout-item-text">
-            checkout by virsympay wallet express
-          </div>
-        </a>
-        <a class="checkout-item" href="<?php echo site_url('checkout/cardCheckout/?publish_key=' . $publish_key); ?>">
-          <div class="checkout-item-logo">
-            <img src="<?php echo base_url('assets/client_assets/images/logo-card.png'); ?>">
-          </div>
-          <div class="checkout-item-text">
-            checkout by credit card
-          </div>
-        </a>
-        <a class="checkout-item" href="<?php echo site_url('checkout/bankCheckout/?publish_key=' . $publish_key); ?>">
-          <div class="checkout-item-logo">
-            <img src="<?php echo base_url('assets/client_assets/images/logo-bank.png'); ?>">
-          </div>
-          <div class="checkout-item-text">
-            checkout by echeck or bank account
-          </div>
-        </a>
-        <a class="checkout-item" href="">
-          <div class="checkout-item-logo">
-            <img src="<?php echo base_url('assets/client_assets/images/logo-coin.png'); ?>">
-          </div>
-          <div class="checkout-item-text">
-            checkout by cryptocurrency
-          </div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <style type="text/css">
     .country-modal-wrap {
       position: fixed;
       left: 0px;
@@ -209,6 +97,126 @@ Header Section Start
       cursor: pointer;
     }
   </style>
+</head>
+
+<body>
+
+  <?php
+  $key = "publish_key";
+  $publish_key = isset($_REQUEST['publish_key']) ? $_REQUEST['publish_key'] : "";
+  if ($publish_key != "") {
+    $product = get_row("product", array("publish_key" => $publish_key));
+    $member = get_row("member", array("id" => $product['user_id']));
+    if ($member['approve_status'] != 2 || $member['status'] == 0) {
+  ?>
+      <div style="position: fixed; width: 100%; height: 100%; background: white; opacity: 0.5; z-index: 10000; ">
+        <p style="width: 1024px;padding: 30px;font-size: 30px;margin: 200px auto;background: black;color: white;text-align: center;">
+          Merchant's account is pending to live mode. Please try later!
+        </p>
+      </div>
+    <?php
+    }
+  }
+
+  if ($publish_key == '') {
+    if (isset($_REQUEST['params'])) {
+      $key = "params";
+
+      $publish_key = json_encode(json_decode($_REQUEST['params']));
+      var_dump($publish_key);
+    }
+  }
+
+
+  if (session()->get("warning") != "") {
+    ?>
+    <div id="alert_error_wrap" class="float-alert animated fadeInRight col-xs-11 col-sm-4 alert alert-danger" style="z-index: 10000;float: right;margin-top: 10px;position: fixed;right: 0px;top: 0px;">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <span class="fa fa-bell-o" data-notify="icon"></span><span class="alert-title"><?php echo session()->get("warning"); ?></span>
+    </div>
+
+  <?php
+    session()->remove("warning");
+  }
+  ?>
+
+  <?php
+  if (session()->get("success") != "") {
+  ?>
+    <div id="alert_error_wrap" class="float-alert animated fadeInRight col-xs-11 col-sm-4 alert alert-success" style="z-index: 10000;float: right;margin-top: 10px;position: fixed;right: 0px;top: 0px;">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <span class="fa fa-bell-o" data-notify="icon"></span><span class="alert-title"><?php echo session()->get("success"); ?></span>
+    </div>
+
+  <?php
+    session()->remove("success");
+  }
+  ?>
+
+
+  <!--
+==================================================
+Header Section Start
+================================================== -->
+  <header id="top-bar" class="navbar-fixed-top animated-header">
+    <div class="container">
+      <div class="navbar-header  mobile-header" style="float: left; margin-top: 10px;">
+        <div class="navbar-brand mobile-header">
+          <img class="mobile-img" src="<?php echo base_url('assets/client_assets/images/logo.png'); ?>" alt="" style="height: 50px;">
+        </div>
+
+      </div>
+      <div class="mobile-header header-title">
+        Please Select your mode of checkout
+      </div>
+    </div>
+  </header>
+
+  <section id="about">
+    <div class="container">
+      <div class="checkout-item-wrap">
+        <div class="checkout-label">how would you like to proceed?</div>
+        <a class="checkout-item" href="">
+          <div class="checkout-item-logo">
+            <img src="<?php echo base_url('assets/client_assets/images/logo-wallet.png'); ?>">
+          </div>
+          <div class="checkout-item-text">
+            checkout by virsympay wallet express
+          </div>
+        </a>
+        <a class="checkout-item" href='<?php echo site_url("checkout/cardCheckout/") . "?" . $key . "=" . $publish_key; ?>'>
+          <div class="checkout-item-logo">
+            <img src="<?php echo base_url('assets/client_assets/images/logo-card.png'); ?>">
+          </div>
+          <div class="checkout-item-text">
+            checkout by credit card
+          </div>
+        </a>
+        <a class="checkout-item" href='<?php echo site_url("checkout/bankCheckout/") . "?" . $key . "=" . $publish_key; ?>'>
+          <div class="checkout-item-logo">
+            <img src="<?php echo base_url('assets/client_assets/images/logo-bank.png'); ?>">
+          </div>
+          <div class="checkout-item-text">
+            checkout by echeck or bank account
+          </div>
+        </a>
+        <a class="checkout-item" href="">
+          <div class="checkout-item-logo">
+            <img src="<?php echo base_url('assets/client_assets/images/logo-coin.png'); ?>">
+          </div>
+          <div class="checkout-item-text">
+            checkout by cryptocurrency
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
   <div class="country-modal-wrap" style="display: none;">
     <div class="country-modal">
       <div class="close-modal">

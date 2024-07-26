@@ -92,10 +92,10 @@ echo view('templates/header');
 							<div class="upload-file-show">
 								<div style="color: #007aff; font-size: 60px;"><i class="icon ion-upload"></i></div>
 								<div class="upload-title">
-									Drop file or Click here to choose file. <span style="color:#FF0000">( Word / Excel / PDF File )</span>
+									Drop file or Click here to choose file.
 								</div>
 							</div>
-							<input type="file" name="upload_file" class="upload-file" id="upload_file" required onchange="checkfile(this);">
+							<input type="file" name="upload_file" class="upload-file" id="upload_file" required>
 						</div>
 						<div class="form-group">
 							<button type="submit" class="btn btn-success">Upload</button>
@@ -148,19 +148,6 @@ echo view('templates/header');
 echo view('templates/footer');
 ?>
 <script type="text/javascript">
-	function checkfile(sender) {
-		var validExts = new Array(".docx", ".doc", ".pdf", ".xls", ".xlsx");
-		var fileExt = sender.value;
-		fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
-		if (validExts.indexOf(fileExt) < 0) {
-			alert("Invalid file selected, valid files are of " +
-				validExts.toString() + " types.");
-
-			sender.value = '';
-			return false;
-		} else return true;
-	}
-
 	$.extend(true, $.fn.dataTable.defaults, {
 		"searching": true,
 		"ordering": false

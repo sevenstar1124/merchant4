@@ -177,7 +177,7 @@
  					<div class="col-md-12">
  						<div class="step-box" data-stage="1">
  							<div class="step-box-title">
- 								Business and Adress Information
+ 								Business and Address Information
  							</div>
  							<div class="step-box-content">
  								<div class="row">

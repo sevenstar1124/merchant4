@@ -190,6 +190,7 @@ echo view('templates/footer');
             <div class="" style="text-align: center;">
               <button type="submit" class="btn btn-info" id="submit_btn">Save</button>
               <button type="button" class="btn btn-warning" id="remove_btn" style=" margin-left: 20px;" data-dismiss="modal">Cancel</button>
+
             </div>
           </div>
 

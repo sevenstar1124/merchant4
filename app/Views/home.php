@@ -1,6 +1,5 @@
 <?php
-// $template("templates", "header");
-echo view("templates/header");
+echo view('templates/header');
 ?>
 <link rel="stylesheet" href="<?php echo base_url("assets/css/vendor.css?v=2.1.1"); ?>">
 
@@ -47,7 +46,7 @@ echo view("templates/header");
           <h2>virsympay reports</h2>
           <ol class="breadcrumb">
             <li>
-              <a href="<?php echo base_url(''); ?>">
+              <a href="<?php echo base_url(""); ?>">
                 Reports
               </a>
             </li>
@@ -103,7 +102,7 @@ echo view("templates/header");
   </div>
 </section>
 <?php
-echo view("templates/footer");
+echo view('templates/footer');
 ?>
 
 <script src="<?php echo base_url("assets/code/highstock.js"); ?>"></script>
@@ -111,6 +110,7 @@ echo view("templates/footer");
 <script src="<?php echo base_url("assets/code/modules/export-data.js"); ?>"></script>
 <script type="text/javascript">
   $(function() {
+
     $.getJSON('<?php echo base_url("home/get_chart_data"); ?>', function(data) {
 
       // $.getJSON('https://www.highcharts.com/samples/data/aapl-c.json', function (data) {

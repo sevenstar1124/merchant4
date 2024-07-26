@@ -186,6 +186,10 @@
       padding: 20px;
     }
 
+    .title {}
+
+    .inline-input-wrap {}
+
     #alert_error_wrap {
       top: 0px !important;
       position: fixed !important;
@@ -316,7 +320,7 @@ Header Section Start
                     $countries = get_rows("countries");
                     foreach ($countries as $key => $country) {
                       if ($country['long_name'] == "United States of America") continue;
-                      echo '<option value="' . $country['ios2'] . '">' . $country['long_name'] . '</option>';
+                      echo '<option value="' . $country['iso2'] . '">' . $country['long_name'] . '</option>';
                     }
                     ?>
                   </select>

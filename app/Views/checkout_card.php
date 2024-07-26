@@ -212,23 +212,23 @@
 <body>
 
   <?php
-  $publish_key = $_REQUEST['publish_key'];
-  $product = get_row("product", array("publish_key" => $publish_key));
-  $member = get_row("member", array("id" => $product['user_id']));
-  if ($member['approve_status'] != 2 || $member['status'] == 0) {
+  $publish_key = isset($_REQUEST['publish_key']) ? $_REQUEST['publish_key'] : "";
+  if ($publish_key != "") {
+    $product = get_row("product", array("publish_key" => $publish_key));
+    $member = get_row("member", array("id" => $product['user_id']));
+    if ($member['approve_status'] != 2 || $member['status'] == 0) {
   ?>
-    <div style="position: fixed; width: 100%; height: 100%; background: white; opacity: 0.5; z-index: 10000; ">
-      <p style="width: 1024px;padding: 30px;font-size: 30px;margin: 200px auto;background: black;color: white;text-align: center;">
-        Merchant's account is pending to live mode. Please try later!
-      </p>
-    </div>
-  <?php
+      <div style="position: fixed; width: 100%; height: 100%; background: white; opacity: 0.5; z-index: 10000; ">
+        <p style="width: 1024px;padding: 30px;font-size: 30px;margin: 200px auto;background: black;color: white;text-align: center;">
+          Merchant's account is pending to live mode. Please try later!
+        </p>
+      </div>
+    <?php
+    }
   }
-  ?>
 
-  <?php
   if (session()->get("warning") != "") {
-  ?>
+    ?>
     <div id="alert_error_wrap" class="float-alert animated fadeInRight col-xs-11 col-sm-4 alert alert-danger" style="z-index: 10000;float: right;margin-top: 10px;position: fixed;right: 0px;top: 0px;">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
@@ -283,7 +283,6 @@ Header Section Start
     <div class="container">
       <div class="row mobile-row">
         <form id="stripe_form" name="stripe_form" method="post" action="<?php echo site_url("checkout/pay"); ?>">
-          <input type="hidden" name="checkout_type" value="card">
           <div class="col-md-8">
             <div class="row">
               <div class="col-md-12 title">
@@ -313,10 +312,10 @@ Header Section Start
                   <select class="form-control" name="country" required="">
                     <option value="US">United States of America</option>
                     <?php
-                    $countries = get_rows("countries");
+                    $countries = get_rows("countries", array(), "long_name ASC");
                     foreach ($countries as $key => $country) {
                       if ($country['long_name'] == "United States of America") continue;
-                      echo '<option value="' . $country['ios2'] . '">' . $country['long_name'] . '</option>';
+                      echo '<option value="' . $country['iso2'] . '">' . $country['long_name'] . '</option>';
                     }
                     ?>
                   </select>
@@ -412,39 +411,67 @@ Header Section Start
               </div>
             </div>
             <?php
-            $publish_key = $_REQUEST['publish_key'];
-            $product = get_row("product", array("publish_key" => $publish_key));
+            $products = array();
+            if ($publish_key != "") {
+              // $product = array(get_row("product", array("publish_key" => $publish_key)));
+              $p = get_row("product", array("publish_key" => $publish_key));
+              $p['qty'] = 1;
+              array_push($products, $p);
+            } else {
+              if (isset($_REQUEST['params'])) {
+                $params = json_decode($_REQUEST['params'], true);
+                if (isset($params['products'])) {
+                  foreach ($params['products'] as $item) {
+                    $p = get_row("product", array("publish_key" => $item['publish_key']));
+                    $p['qty'] = intval($item['qty']);
+                    array_push($products, $p);
+                  }
+                }
+              }
+            }
+
             $payment = get_row("paymentgetway", array("id" => 1));
             $fee = $payment['checkout_fee'];
-
             ?>
             <div class="col-md-12" style="font-size: 20px; margin-top: 20px;">
               Product Details
-              <p style="font-size: 14px; font-weight: 500; margin-top: 10px; margin-bottom: 0px;">
-                <b>Product ID :</b> <?php echo $product['id']; ?>
-              </p>
-              <p style="font-size: 14px; font-weight: 500; margin-bottom: 5px;">
-                <b>Title :</b> <?php echo $product['title']; ?>
-              </p>
+              <?php
+              $total_price = 0;
+              foreach ($products as $product) {
+              ?>
+                <p style="font-size: 14px; font-weight: 500; margin-top: 10px; margin-bottom: 0px;">
+                  <b>Product ID :</b> <?php echo $product['id']; ?>
+                </p>
+                <p style="font-size: 14px; font-weight: 500; margin-bottom: 0px;">
+                  <b>Title :</b> <?php echo $product['title']; ?>
+                </p>
+                <p style="font-size: 14px; font-weight: 500; margin-bottom: 0px;">
+                  <b>Description</b>
+                </p>
+                <p style="font-size: 14px; font-weight: 400; margin-bottom: 0px; padding-left: 5px;">
+                  <?php echo nl2br($product['description']); ?>
+                </p>
+                <p style="font-size: 14px; font-weight: 500; margin-bottom: 0px;">
+                  <?php
+                  if ($product['qty'] == 1) {
+                    $price = $product['price'];
+                  } else {
+                    $price = $product['price'] .  " x " . $product['qty'] . " = $" . $product['price'] * $product['qty'];
+                  }
+                  ?>
+                  <b>Price :</b> $<?php echo $price; ?>
+                </p>
+              <?php
+                $total_price += $product['price'] * $product['qty'];
+              } ?>
 
-              <p style="font-size: 14px; font-weight: 500; margin-bottom: 5px;">
-                <b>Description</b>
-              </p>
 
-              <p style="font-size: 14px; font-weight: 400; margin-bottom: 5px; padding-left: 5px;">
-                <?php echo nl2br($product['description']); ?>
-              </p>
-
-              <p style="font-size: 14px; font-weight: 500; margin-bottom: 5px;">
-                <b>Price :</b> $<?php echo $product['price']; ?>
-              </p>
-
-              <p style="font-size: 14px; font-weight: 500; margin-bottom: 5px;">
+              <p style="font-size: 14px; font-weight: 500; margin-top: 10px; margin-bottom: 0;">
                 <b>Fee :</b> $<?php echo $fee; ?>
               </p>
 
-              <p style="font-size: 14px; font-weight: 500; margin-bottom: 5px;">
-                <b>Total Price :</b> $<?php echo $product["price"] + $fee; ?>
+              <p style="font-size: 14px; font-weight: 500; margin-bottom: 0px;">
+                <b>Total Price :</b> $<?php echo $total_price + $fee; ?>
               </p>
 
             </div>
@@ -452,9 +479,13 @@ Header Section Start
               <button type="submit" id="pay_btn" class="btn btn-success" style="width: 100%; margin-top: 20px;">Pay now</button>
             </div>
           </div>
-
-          <input type="hidden" name="publish_key" value="<?php echo $_REQUEST["publish_key"]; ?>">
-          <input type="hidden" name="price" value="<?php echo ($product["price"] + $fee); ?>">
+          <?php
+          $name = $publish_key == "" ? "params" : "publish_key";
+          $value = $publish_key == "" ? json_encode($params) : $publish_key
+          ?>
+          <input type="hidden" name="checkout_type" value="card">
+          <input type="hidden" name="<?php echo $name; ?>" value='<?php echo $value; ?>'>
+          <input type="hidden" name="price" value="<?php echo ($total_price + $fee); ?>">
           <?php
           $stripe_publish_key = $payment['stripe_publish_key'];
           ?>

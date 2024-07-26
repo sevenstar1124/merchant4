@@ -5,18 +5,9 @@ echo view('templates/header');
 	<div class="container">
 		<div class="row">
 			<div class="col-md-3" style="padding: 0px 10px 0px 0px;">
-				<ul class="account-siderbar">
-					<li><a href="<?php echo site_url("/account/dashboard"); ?>"><i class="ion-ios-contact"></i> My Profile</a></li>
-					<li><a href="<?php echo site_url("/account/businessInfo"); ?>"><i class="icon ion-card"></i> Business Info</a></li>
-					<li><a href="<?php echo site_url("/account/uploadCenter"); ?>"><i class="icon ion-upload"></i> Upload Center</a></li>
-					<li><a href="<?php echo site_url("/account/card_info"); ?>"><i class="icon ion-card"></i> Credit Card Info</a></li>
-
-					<li><a href="<?php echo site_url("/account/register_product"); ?>"><i class="ion-ios-medkit"></i> Products</a></li>
-					<li><a href="<?php echo site_url("/account/transaction_history"); ?>"><i class="ion-ios-paper"></i> Transaction History</a></li>
-					<li class="active"><a href="<?php echo site_url("/account/withdraw_money"); ?>"><i class="ion-merge"></i> Withdraw Money</a></li>
-					<li class=""><a href="<?php echo site_url("/account/inbox"); ?>"><i class="ion-email"></i> Inbox <span class="message-count-box" style="display: none;"></span></a></li>
-
-				</ul>
+				<?php
+				$this->load->view("components/siderbar", array('active' => 'withdraw'));
+				?>
 			</div>
 			<div class="col-md-9" style="padding: 0px 0px 0px 10px;">
 				<div class="account-panel <?php if (session()->get("active_status") == "Inactive") echo "inactive-panel"; ?>">
