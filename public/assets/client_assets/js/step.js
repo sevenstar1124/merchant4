@@ -54,6 +54,10 @@ $(function () {
 						phase_status = 6;
 					}
 					displayPhaseStatus();
+
+					document.querySelectorAll('input[name="csrf_test_name"]').forEach(element => {
+						element.value = res.csrf_token;
+					});
 				}
 			},
 			complete: function (res) {

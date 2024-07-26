@@ -98,6 +98,7 @@
  	<section>
  		<div class="container" style="min-height: calc(100VH - 75px);">
  			<form action="<?php echo site_url("profileStep/saveStep"); ?>" method="post" name="step_form" id="step_form">
+ 				<?= csrf_field(); ?>
  				<input type="hidden" name="phase_status" id="phase_status" value="<?php echo $member_data['phase_status'] ?? 1; ?>">
  				<div class="row">
  					<div class="col-md-12">

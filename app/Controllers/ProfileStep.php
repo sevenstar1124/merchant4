@@ -42,6 +42,11 @@ class ProfileStep extends My_Controller
         } else {
             $res = $this->commonModel->updateData("member_data", $data, array("id" => $member_data['id']));
         }
-        echo json_encode(array('status' => "ok"));
+
+        $security = \Config\Services::security();
+        return $this->response->setJSON([
+            'status' => 'ok',
+            'csrf_token' => $security->generateHash()
+        ]);
     }
 }
