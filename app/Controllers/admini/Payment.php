@@ -20,7 +20,8 @@ class Payment extends MY_Admin_Controller
 
     public function paymentSetting()
     {
-        return view("admini/payment_getway");
+        $getway = $this->commonModel->readData("paymentgetway", array("id" => 1));
+        return view("admini/payment_getway", ['user' => $this->user, 'getway' => $getway]);
     }
 
     public function updateGetway()

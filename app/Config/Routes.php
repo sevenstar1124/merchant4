@@ -42,6 +42,7 @@ $routes->group('admini', ['namespace' => 'App\Controllers\Admini'], function ($r
     $routes->get('inbox/get_email_count', 'Inbox::get_email_count');
     $routes->get('dashboard/get_chart_data', 'Dashboard::get_chart_data');
     $routes->get('dashboard/get_pipe_data', 'Dashboard::get_pipe_data');
+    $routes->post('dashboard/download_report', 'Dashboard::download_report');
 
     $routes->get('account/get_email_count', 'Account::get_email_count');
 
@@ -55,7 +56,8 @@ $routes->group('admini', ['namespace' => 'App\Controllers\Admini'], function ($r
     $routes->get('payment', 'Payment::index');
     $routes->get('payment/withdraw', 'Payment::withdraw');
     $routes->get('payment/request_refund', 'Payment::request_refund');
-    
+    $routes->get('payment/paymentSetting', 'Payment::paymentSetting');
+
 
     $routes->get('customer/active', 'Customer::active');
     $routes->get('customer/inactive', 'Customer::inactive');
@@ -66,5 +68,9 @@ $routes->group('admini', ['namespace' => 'App\Controllers\Admini'], function ($r
 
     $routes->get('help/get_support', 'Help::get_support');
     $routes->get('help/faq', 'Help::faq');
-    
+
+    $routes->get('setting/email_template', 'Setting::email_template');
+    $routes->get('message', 'Message::index');
+    $routes->get('message/sent', 'Message::sent');
+    $routes->get('message/compose', 'Message::compose');
 });
