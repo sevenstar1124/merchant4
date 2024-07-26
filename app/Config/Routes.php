@@ -11,6 +11,8 @@ $routes->post('login/login', 'Login::login');
 $routes->post('login/signup', 'Login::signup');
 
 $routes->group('', ['filter' => 'authClient'], function ($routes) {
+    $routes->get('/profileStep', 'ProfileStep::index');
+
 
     $routes->get('/', 'Home::index');
     $routes->get('/home/get_chart_data', 'Home::get_chart_data');

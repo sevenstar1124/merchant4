@@ -117,7 +117,7 @@ function get_row($table, $where)
 
     if ($res)
         return $res[0];
-    return null;
+    return [];
 }
 
 function add_logo($msg_body)

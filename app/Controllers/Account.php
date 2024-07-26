@@ -27,11 +27,8 @@ class Account extends MY_Controller
 
     public function businessInfo()
     {
-        echo session()->get("member_id");
         $member_data = get_row('member_data', array("member_id" => session()->get("member_id")));
-        print_r($member_data);
-        exit;
-        return view("business_info");
+        return view("business_info", ['member_data' => $member_data]);
     }
     public function dashboard()
     {
@@ -457,7 +454,7 @@ class Account extends MY_Controller
             $invoice['price'] = $total_price;
             array_push($i, $invoice);
         }
-        return return view('invoices', array('invoices' => $i));
+        return view('invoices', array('invoices' => $i));
     }
 
     public function invoice_create()
@@ -492,7 +489,7 @@ class Account extends MY_Controller
         $data['total_price'] = $total_price;
 
 
-        $html = return view('invoice', $data, true);
+        $html = view('invoice', $data, true);
 
         sendMail($data['email'], "Merchant Virsympay Invoice", $html, "", false);
 

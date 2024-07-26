@@ -4,16 +4,13 @@ namespace App\Controllers;
 
 use App\Models\CommonModel;
 
-class ProfileStep extends BaseController
+class ProfileStep extends My_Controller
 {
     protected $commonModel;
     public function __construct()
     {
         $this->commonModel = new CommonModel();
         // Call the Model constructor
-        if (!session()->get("member_id")) {
-            redirect(base_url("login"));
-        }
     }
 
     public function index()
