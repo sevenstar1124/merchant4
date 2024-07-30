@@ -23,6 +23,6 @@ class AcceptTerms extends BaseController
         $this->commonModel->updateData("member", array("approve_status" => 1), array("id" => $id));
         session()->set("approve_status", 1);
         session()->set("success", "Your account is now under review, we contact once further action is needed, Thank you for choosing Virsympay");
-        redirect(base_url(''));
+        return redirect()->to(base_url(''));
     }
 }

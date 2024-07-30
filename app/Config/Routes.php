@@ -12,6 +12,7 @@ $routes->post('login/signup', 'Login::signup');
 $routes->get('/AcceptTerms', 'AcceptTerms::index');
 
 $routes->group('', ['filter' => 'authClient'], function ($routes) {
+    $routes->get('/AcceptTerms/accept', 'AcceptTerms::accept');
     $routes->get('/profileStep', 'ProfileStep::index');
     $routes->post('/profileStep/saveStep', 'ProfileStep::saveStep');
 
